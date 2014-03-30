@@ -1,0 +1,86 @@
+RCtor(_RTClassName)
+{
+    This -> Data = NULL;
+    This -> Size = 0;
+    RInit(_RTClassName);
+}
+RDtor(_RTClassName)
+{
+    free(This -> Data);
+}
+
+RTMethod(void, CDSP2_Wave, CtorSize, int Size)
+{
+    This -> Data = (_T1*)malloc(Size * sizeof(_T1));
+    This -> Size = Size;
+    RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
+}
+RTMethod(void, CDSP2_Wave, Resize, int Size)
+{
+    This -> Data = (_T1*)realloc(This -> Data, Size * sizeof(_T1));
+    This -> Size = Size;
+    RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
+}
+
+RTMethod(void, CDSP2_Wave, Read, _T1* Dest, int LBound, int Size)
+{
+    if(LBound + Size < 0)
+    {
+        //Totally beyond left bound
+        RCall(CDSP2_VSet, _T1)(Dest, 0, Size);
+        return;
+    }
+    if(LBound < 0)
+    {
+        //left edge
+        RCall(CDSP2_VSet, _T1)(Dest, 0, - LBound);
+        Size += LBound;
+        Dest -= LBound;
+        LBound = 0;
+    }
+    if(LBound > This -> Size)
+    {
+        //Totally beyond right bound
+        RCall(CDSP2_VSet, _T1)(Dest, 0, Size);
+        return;
+    }
+    if(LBound + Size > This -> Size)
+    {
+        //right edge
+        RCall(CDSP2_VSet, _T1)(Dest + This -> Size - LBound, 0,
+                               LBound + Size - This -> Size);
+        Size = This -> Size - LBound;
+    }
+    //Safe copy
+    RCall(CDSP2_VCopy, _T1)(Dest, This -> Data + LBound, Size);
+}
+
+RTMethod(void, CDSP2_Wave, Write, _T1* Sorc, int LBound, int Size)
+{
+    if(LBound + Size < 0)
+    {
+        //Totally beyond left bound
+        return;
+    }
+    if(LBound < 0)
+    {
+        //left edge
+        Size += LBound;
+        Sorc -= LBound;
+        LBound = 0;
+    }
+    if(LBound > This -> Size)
+    {
+        //Totally beyond right bound
+        return;
+    }
+    if(LBound + Size > This -> Size)
+    {
+        //right edge
+        Size = This -> Size - LBound;
+        //RCall(CDSP2_VCopy, _T1)(This -> Data + LBound, Sorc,
+        //                        LBound + Size - This -> Size);
+    }
+    RCall(CDSP2_VCopy, _T1)(This -> Data + LBound, Sorc, Size);
+}
+

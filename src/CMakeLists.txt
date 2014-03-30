@@ -1,11 +1,16 @@
 aux_source_directory(./Interface SRC_LIST)
-aux_source_directory(./Wave SRC_LIST)
+aux_source_directory(./Container SRC_LIST)
 
 set(CMAKE_C_FLAGS "-Ofast -I${TopDir}/src")
 
 add_library(CVEDSP2 SHARED ${SRC_LIST})
-target_include_directories(CVEDSP2 PUBLIC "${CMAKE_SOURCE_DIR}/src")
+include_directories(CVEDSP2 PUBLIC "${CMAKE_SOURCE_DIR}/src")
 
+file(GLOB Header_Interface_RFNLInterface "Interface/RFNLInterface/*.h")
+install(FILES Interface/Setting.h
+              DESTINATION /usr/include/CVEDSP2)
+install(FILES ${Header_Interface_RFNLInterface}
+              DESTINATION /usr/include/CVEDSP2/RFNLInterface)
 install(FILES Include/CVEDSP2.h
               DESTINATION /usr/include/)
 
