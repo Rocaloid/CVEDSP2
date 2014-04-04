@@ -1,0 +1,90 @@
+#undef  _Base
+#define _Base MyBase(_C(CDSP2_Wave, _, _T1))
+
+RCtor(_RTClassName)
+{
+    _C(CDSP2_Wave_, _T1, _Ctor)(_Base);
+    This -> VPosition = 0;
+    This -> SPosition = 0;
+}
+
+RDtor(_RTClassName)
+{
+    _C(CDSP2_Wave_, _T1, _Dtor)(_Base);
+}
+
+RTMethod(static int, CDSP_InfWave, VBoundCheck, int VPosition)
+{
+    //Left edge
+    if(VPosition < This -> VPosition)
+        return 0;
+    //Right edge
+    if(VPosition > This -> VPosition + _Base -> Size)
+        return 0;
+    return 1;
+}
+
+RTMethod(void, CDSP2_InfWave, CtorSize, int Size)
+{
+    _C(CDSP2_Wave_, _T1, _CtorSize)(_Base, Size);
+}
+
+RTMethod(void, CDSP2_InfWave, Resize, int Size)
+{
+    _C(CDSP2_Wave_, _T1, _Resize)(_Base, Size);
+}
+
+RTMethod(int, CDSP2_InfWave, Relocate, int VPosition)
+{
+    This -> VPosition = VPosition;
+    This -> SPosition = VPosition;
+}
+
+RTMethod(int, CDSP2_InfWave, Submit, int VPosition)
+{
+    if(VPosition < This -> SPosition)
+        return 0;
+    if(! RCall(_RTClassName, VBoundCheck)(This, VPosition))
+        return 0;
+    This -> SPosition = VPosition;
+    return 1;
+}
+
+RTMethod(int, CDSP2_InfWave, Dump, _T1* Dest)
+{
+    int i;
+    int Length = This -> SPosition - This -> VPosition;
+    //Dump
+    RCall(CDSP2_VCopy, _T1)(Dest, _Base -> Data, Length);
+    //Restore TODO:SIMDlize
+    for(i = This -> SPosition; i < This -> VPosition + _Base -> Size; i ++)
+        _Base -> Data[i - This -> SPosition] = _Base -> Data[i];
+    This -> VPosition = This -> SPosition;
+    
+    return Length;
+}
+
+RTMethod(int, CDSP2_InfWave, Read, _T1* Dest, int LVPosition, int Size)
+{
+    if(! RCall(_RTClassName, VBoundCheck)(This, LVPosition))
+        return 0;
+    int LBound = LVPosition - This -> VPosition;
+    //Right edge
+    if(LBound + Size > _Base -> Size)
+        return 0;
+    _C(CDSP2_Wave_, _T1, _Read)(_Base, Dest, LBound, Size);
+    return 1;
+}
+
+RTMethod(int, CDSP2_InfWave, Write, _T1* Sorc, int LVPosition, int Size)
+{
+    if(! RCall(_RTClassName, VBoundCheck)(This, LVPosition))
+        return 0;
+    int LBound = LVPosition - This -> VPosition;
+    //Right edge
+    if(LBound + Size > _Base -> Size)
+        return 0;
+    _C(CDSP2_Wave_, _T1, _Write)(_Base, Sorc, LBound, Size);
+    return 1;
+}
+
