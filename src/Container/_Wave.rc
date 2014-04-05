@@ -2,17 +2,25 @@ RCtor(_RTClassName)
 {
     This -> Data = NULL;
     This -> Size = 0;
+    This -> WinBuff = NULL;
+    This -> Window = NULL;
+    This -> WinSize = 0;
     RInit(_RTClassName);
 }
+
 RDtor(_RTClassName)
 {
     free(This -> Data);
+    free(This -> WinBuff);
 }
 
 RTMethod(void, CDSP2_Wave, CtorSize, int Size)
 {
     This -> Data = (_T1*)malloc(Size * sizeof(_T1));
     This -> Size = Size;
+    This -> WinBuff = NULL;
+    This -> Window = NULL;
+    This -> WinSize = 0;
     RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
 }
 RTMethod(void, CDSP2_Wave, Resize, int Size)
@@ -20,6 +28,13 @@ RTMethod(void, CDSP2_Wave, Resize, int Size)
     This -> Data = (_T1*)realloc(This -> Data, Size * sizeof(_T1));
     This -> Size = Size;
     RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
+}
+
+RTMethod(void, CDSP2_Wave, SetWindow, _T1* Sorc, int Size)
+{
+    This -> Window = Sorc;
+    This -> WinSize = Size;
+    This -> WinBuff = (_T1*)realloc(This -> WinBuff, sizeof(_T1) * Size);
 }
 
 RTMethod(void, CDSP2_Wave, Read, _T1* Dest, int LBound, int Size)
@@ -55,32 +70,61 @@ RTMethod(void, CDSP2_Wave, Read, _T1* Dest, int LBound, int Size)
     RCall(CDSP2_VCopy, _T1)(Dest, This -> Data + LBound, Size);
 }
 
+#undef  _WriteCheck
+#define _WriteCheck \
+    if(LBound + Size < 0) \
+    { \
+        /*Totally beyond left bound*/ \
+        return; \
+    } \
+    if(LBound < 0) \
+    { \
+        /*left edge*/ \
+        Size += LBound; \
+        Sorc -= LBound; \
+        LBound = 0; \
+    } \
+    if(LBound > This -> Size) \
+    { \
+        /*Totally beyond right bound*/ \
+        return; \
+    } \
+    if(LBound + Size > This -> Size) \
+    { \
+        /*right edge*/ \
+        Size = This -> Size - LBound; \
+    }
+
 RTMethod(void, CDSP2_Wave, Write, _T1* Sorc, int LBound, int Size)
 {
-    if(LBound + Size < 0)
-    {
-        //Totally beyond left bound
-        return;
-    }
-    if(LBound < 0)
-    {
-        //left edge
-        Size += LBound;
-        Sorc -= LBound;
-        LBound = 0;
-    }
-    if(LBound > This -> Size)
-    {
-        //Totally beyond right bound
-        return;
-    }
-    if(LBound + Size > This -> Size)
-    {
-        //right edge
-        Size = This -> Size - LBound;
-        //RCall(CDSP2_VCopy, _T1)(This -> Data + LBound, Sorc,
-        //                        LBound + Size - This -> Size);
-    }
+    _WriteCheck
     RCall(CDSP2_VCopy, _T1)(This -> Data + LBound, Sorc, Size);
+}
+
+RTMethod(void, CDSP2_Wave, Add, _T1* Sorc, int LBound, int Size)
+{
+    _WriteCheck
+    RCall(CDSP2_VAdd, _T1)(This -> Data + LBound, This -> Data + LBound,
+                           Sorc, Size);
+}
+
+RTMethod(void, CDSP2_Wave, WRead, _T1* Dest, int LBound)
+{
+    RCall(_RTClassName, Read)(This, Dest, LBound, This -> WinSize);
+    RCall(CDSP2_VMul, _T1)(Dest, Dest, This -> Window, This -> WinSize);
+}
+
+RTMethod(void, CDSP2_Wave, WWrite, _T1* Sorc, int LBound)
+{
+    RCall(CDSP2_VMul, _T1)(This -> WinBuff, Sorc, This -> Window,
+                           This -> WinSize);
+    RCall(_RTClassName, Write)(This, This -> WinBuff, LBound, This -> WinSize);
+}
+
+RTMethod(void, CDSP2_Wave, WAdd, _T1* Sorc, int LBound)
+{
+    RCall(CDSP2_VMul, _T1)(This -> WinBuff, Sorc, This -> Window,
+                           This -> WinSize);
+    RCall(_RTClassName, Add)(This, This -> WinBuff, LBound, This -> WinSize);
 }
 

@@ -15,7 +15,20 @@ RTMethod(void, CDSP2_InfWave, Resize, int Size);
 RTMethod(int, CDSP2_InfWave, Relocate, int VPosition);
 RTMethod(int, CDSP2_InfWave, Submit, int VPosition);
 
+RTMethod(void, CDSP2_InfWave, SetWindow, _T1* Sorc, int Size);
+
+//Dump
 RTMethod(int, CDSP2_InfWave, Dump, _T1* Dest);
+//Read
 RTMethod(int, CDSP2_InfWave, Read, _T1* Dest, int LVPosition, int Size);
+//Overridding Write
 RTMethod(int, CDSP2_InfWave, Write, _T1* Sorc, int LVPosition, int Size);
+//Additive Write
+RTMethod(int, CDSP2_InfWave, Add, _T1* Sorc, int LVPosition, int Size);
+//Windowed Read
+RTMethod(int, CDSP2_InfWave, WRead, _T1* Dest, int LVPosition);
+//Windowed Overidding Write
+RTMethod(int, CDSP2_InfWave, WWrite, _T1* Sorc, int LVPosition);
+//Windowed Additive Write
+RTMethod(int, CDSP2_InfWave, WAdd, _T1* Sorc, int LVPosition);
 
