@@ -39,20 +39,18 @@ int main()
 
     CDSP2_IWave_Double_Add(& twave, temp, 15500, 3000);
     CDSP2_InfWave_Double_Submit(& twave, 18500);
-    CDSP2_InfWave_Double_WAdd(& twave, temp, 16500);
-    CDSP2_InfWave_Double_WAdd(& twave, temp, 17000);
-    /*
-    CDSP2_InfWave_Double_Read(& twave, temp, 15000, 3000);*/
+    CDSP2_IWave_Double_WAdd(& twave, temp, 16500);
+    CDSP2_IWave_Double_WAdd(& twave, temp, 17000);
+    //CDSP2_InfWave_Double_Read(& twave, temp, 15000, 3000);
     //l = CDSP2_InfWave_Double_Dump(& twave, temp2);
     //CDSP2_VSet_Double(temp2, 0, 6000);
     
-    CDSP2_InfWave_Double_WAdd(& twave, temp, 19000);
+    CDSP2_IWave_Double_WAdd(& twave, temp, 19000);
     CDSP2_InfWave_Double_Submit(& twave, 20500);
     l = CDSP2_InfWave_Double_Dump(& twave, temp2);
     for(i = 0; i < 6000; i ++)
         printf("%f\n", temp2[i]);
     //printf("%d\n", l);
-
     RFree(temp);
     RFree(temp2);
     RFree(wind);

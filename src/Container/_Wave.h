@@ -3,6 +3,9 @@ RInterface_Define(void, _C(CDSP2_IWave_, _T1, _SetWindow), void*, _T1*, int);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _Read), void*, _T1*, int, int);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _Write), void*, _T1*, int, int);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _Add), void*, _T1*, int, int);
+RInterface_Define(void, _C(CDSP2_IWave_, _T1, _WRead), void*, _T1*, int);
+RInterface_Define(void, _C(CDSP2_IWave_, _T1, _WWrite), void*, _T1*, int);
+RInterface_Define(void, _C(CDSP2_IWave_, _T1, _WAdd), void*, _T1*, int);
 
 RClass(_RTClassName)
 {

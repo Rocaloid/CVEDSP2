@@ -1,6 +1,11 @@
 #undef  _Base
 #define _Base MyBase(_C(CDSP2_Wave, _, _T1))
 
+#undef  _AddMethod
+#define _AddMethod(Name) \
+    RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _, Name), \
+                         _C(CDSP2_InfWave_, _T1, _, Name), _RTClassName)
+
 RCtor(_RTClassName)
 {
     _C(CDSP2_Wave_, _T1, _Ctor)(_Base);
@@ -37,8 +42,7 @@ RTMethod(void, CDSP2_InfWave, Resize, int Size)
 {
     _C(CDSP2_Wave_, _T1, _Resize)(_Base, Size);
 }
-RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Resize),
-                     _C(CDSP2_InfWave_, _T1, _Resize), _RTClassName);
+_AddMethod(Resize);
 
 //*** Relocate ***
 RTMethod(int, CDSP2_InfWave, Relocate, int VPosition)
@@ -63,8 +67,7 @@ RTMethod(void, CDSP2_InfWave, SetWindow, _T1* Sorc, int Size)
 {
     _C(CDSP2_Wave_, _T1, _SetWindow)(This, Sorc, Size);
 }
-RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _SetWindow),
-                     _C(CDSP2_InfWave_, _T1, _SetWindow), _RTClassName);
+_AddMethod(SetWindow);
 
 //*** Dump ***
 RTMethod(int, CDSP2_InfWave, Dump, _T1* Dest)
@@ -98,8 +101,7 @@ RTMethod(int, CDSP2_InfWave, Read, _T1* Dest, int LVPosition, int Size)
     _C(CDSP2_Wave_, _T1, _Read)(_Base, Dest, LBound, Size);
     return 1;
 }
-RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Read),
-                     _C(CDSP2_InfWave_, _T1, _Read), _RTClassName);
+_AddMethod(Read);
 
 //*** Write ***
 RTMethod(int, CDSP2_InfWave, Write, _T1* Sorc, int LVPosition, int Size)
@@ -108,8 +110,7 @@ RTMethod(int, CDSP2_InfWave, Write, _T1* Sorc, int LVPosition, int Size)
     _C(CDSP2_Wave_, _T1, _Write)(_Base, Sorc, LBound, Size);
     return 1;
 }
-RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Write),
-                     _C(CDSP2_InfWave_, _T1, _Write), _RTClassName);
+_AddMethod(Write);
 
 //*** Add ***
 RTMethod(int, CDSP2_InfWave, Add, _T1* Sorc, int LVPosition, int Size)
@@ -118,8 +119,7 @@ RTMethod(int, CDSP2_InfWave, Add, _T1* Sorc, int LVPosition, int Size)
     _C(CDSP2_Wave_, _T1, _Add)(_Base, Sorc, LBound, Size);
     return 1;
 }
-RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Add),
-                     _C(CDSP2_InfWave_, _T1, _Add), _RTClassName);
+_AddMethod(Add);
 
 //*** WRead ***
 RTMethod(int, CDSP2_InfWave, WRead, _T1* Dest, int LVPosition)
@@ -129,6 +129,7 @@ RTMethod(int, CDSP2_InfWave, WRead, _T1* Dest, int LVPosition)
     _C(CDSP2_Wave_, _T1, _WRead)(_Base, Dest, LBound);
     return 1;
 }
+_AddMethod(WRead);
 
 //*** WWrite ***
 RTMethod(int, CDSP2_InfWave, WWrite, _T1* Sorc, int LVPosition)
@@ -138,6 +139,7 @@ RTMethod(int, CDSP2_InfWave, WWrite, _T1* Sorc, int LVPosition)
     _C(CDSP2_Wave_, _T1, _WWrite)(_Base, Sorc, LBound);
     return 1;
 }
+_AddMethod(WWrite);
 
 //*** WAdd ***
 RTMethod(int, CDSP2_InfWave, WAdd, _T1* Sorc, int LVPosition)
@@ -147,4 +149,5 @@ RTMethod(int, CDSP2_InfWave, WAdd, _T1* Sorc, int LVPosition)
     _C(CDSP2_Wave_, _T1, _WAdd)(_Base, Sorc, LBound);
     return 1;
 }
+_AddMethod(WAdd);
 
