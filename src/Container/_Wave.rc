@@ -1,3 +1,10 @@
+RInterface_Make(_C(CDSP2_IWave_, _T1, _Resize));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _SetWindow));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _Read));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _Write));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _Add));
+
+//Wave
 RCtor(_RTClassName)
 {
     This -> Data = NULL;
@@ -14,6 +21,7 @@ RDtor(_RTClassName)
     free(This -> WinBuff);
 }
 
+//*** CtorSize ***
 RTMethod(void, CDSP2_Wave, CtorSize, int Size)
 {
     This -> Data = (_T1*)malloc(Size * sizeof(_T1));
@@ -22,21 +30,38 @@ RTMethod(void, CDSP2_Wave, CtorSize, int Size)
     This -> Window = NULL;
     This -> WinSize = 0;
     RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
+    RInit(_RTClassName);
 }
+
+//*** Resize ***
 RTMethod(void, CDSP2_Wave, Resize, int Size)
 {
     This -> Data = (_T1*)realloc(This -> Data, Size * sizeof(_T1));
     This -> Size = Size;
     RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
 }
+RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Resize),
+                     _C(CDSP2_Wave_, _T1, _Resize), _RTClassName);
+void _C(CDSP2_IWave_, _T1, _Resize)(void* This, int Size)
+{
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _Resize), This, Size);
+}
 
+//*** SetWindow ***
 RTMethod(void, CDSP2_Wave, SetWindow, _T1* Sorc, int Size)
 {
     This -> Window = Sorc;
     This -> WinSize = Size;
     This -> WinBuff = (_T1*)realloc(This -> WinBuff, sizeof(_T1) * Size);
 }
+RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _SetWindow),
+                     _C(CDSP2_Wave_, _T1, _SetWindow), _RTClassName);
+void _C(CDSP2_IWave_, _T1, _SetWindow)(void* This, _T1* Sorc, int Size)
+{
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _SetWindow), This, Sorc, Size);
+}
 
+//*** Read ***
 RTMethod(void, CDSP2_Wave, Read, _T1* Dest, int LBound, int Size)
 {
     if(LBound + Size < 0)
@@ -69,6 +94,12 @@ RTMethod(void, CDSP2_Wave, Read, _T1* Dest, int LBound, int Size)
     //Safe copy
     RCall(CDSP2_VCopy, _T1)(Dest, This -> Data + LBound, Size);
 }
+RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Read),
+                     _C(CDSP2_Wave_, _T1, _Read), _RTClassName);
+void _C(CDSP2_IWave_, _T1, _Read)(void* This, _T1* Dest, int LBound, int Size)
+{
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _Read), This, Dest, LBound, Size);
+}
 
 #undef  _WriteCheck
 #define _WriteCheck \
@@ -95,25 +126,41 @@ RTMethod(void, CDSP2_Wave, Read, _T1* Dest, int LBound, int Size)
         Size = This -> Size - LBound; \
     }
 
+//*** Write ***
 RTMethod(void, CDSP2_Wave, Write, _T1* Sorc, int LBound, int Size)
 {
     _WriteCheck
     RCall(CDSP2_VCopy, _T1)(This -> Data + LBound, Sorc, Size);
 }
+RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Write),
+                     _C(CDSP2_Wave_, _T1, _Write), _RTClassName);
+void _C(CDSP2_IWave_, _T1, _Write)(void* This, _T1* Sorc, int LBound, int Size)
+{
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _Write), This, Sorc, LBound, Size);
+}
 
+//*** Add ***
 RTMethod(void, CDSP2_Wave, Add, _T1* Sorc, int LBound, int Size)
 {
     _WriteCheck
     RCall(CDSP2_VAdd, _T1)(This -> Data + LBound, This -> Data + LBound,
                            Sorc, Size);
 }
+RInterface_AddMethod(_C(CDSP2_IWave_, _T1, _Add),
+                     _C(CDSP2_Wave_, _T1, _Add), _RTClassName);
+void _C(CDSP2_IWave_, _T1, _Add)(void* This, _T1* Sorc, int LBound, int Size)
+{
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _Add), This, Sorc, LBound, Size);
+}
 
+//*** WRead ***
 RTMethod(void, CDSP2_Wave, WRead, _T1* Dest, int LBound)
 {
     RCall(_RTClassName, Read)(This, Dest, LBound, This -> WinSize);
     RCall(CDSP2_VMul, _T1)(Dest, Dest, This -> Window, This -> WinSize);
 }
 
+//*** WWrite ***
 RTMethod(void, CDSP2_Wave, WWrite, _T1* Sorc, int LBound)
 {
     RCall(CDSP2_VMul, _T1)(This -> WinBuff, Sorc, This -> Window,
@@ -121,6 +168,7 @@ RTMethod(void, CDSP2_Wave, WWrite, _T1* Sorc, int LBound)
     RCall(_RTClassName, Write)(This, This -> WinBuff, LBound, This -> WinSize);
 }
 
+//*** WAdd ***
 RTMethod(void, CDSP2_Wave, WAdd, _T1* Sorc, int LBound)
 {
     RCall(CDSP2_VMul, _T1)(This -> WinBuff, Sorc, This -> Window,

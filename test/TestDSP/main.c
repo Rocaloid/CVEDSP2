@@ -32,12 +32,12 @@ int main()
     Double* wind = RAlloc_Double(3000);
     CDSP2_VSet_Double(wind, 1, 3000);
     CDSP2_Hanning_Double(wind, wind, 3000);
-    CDSP2_InfWave_Double_SetWindow(& twave, wind, 3000);
+    CDSP2_IWave_Double_SetWindow(& twave, wind, 3000);
     
     for(i = 0; i < 3000; i ++)
         temp[i] = 0.2f * i;
 
-    CDSP2_InfWave_Double_Add(& twave, temp, 15500, 3000);
+    CDSP2_IWave_Double_Add(& twave, temp, 15500, 3000);
     CDSP2_InfWave_Double_Submit(& twave, 18500);
     CDSP2_InfWave_Double_WAdd(& twave, temp, 16500);
     CDSP2_InfWave_Double_WAdd(& twave, temp, 17000);
