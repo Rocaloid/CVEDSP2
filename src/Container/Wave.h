@@ -1,6 +1,7 @@
 #ifndef CDSP2_WAVE_H
 #define CDSP2_WAVE_H
 
+#include <RFNL.h>
 #include <RUtil2.h>
 
 #if 0

@@ -18,8 +18,8 @@ int main()
     
     int Size = 1024;
     CDSP2_FWindow_Float_Generate(& fwin, Dest, Size);
-    for(i = 0; i < Size; i ++)
-        printf("%d %f\n", i, Dest[i]/* - Wind[i]*/);
+    //for(i = 0; i < Size; i ++)
+    //    printf("%d %f\n", i, Dest[i]/* - Wind[i]*/);
     
     RFNL_FWindow_Gnrc_Float_Dtor(& fwin);
     return 0;

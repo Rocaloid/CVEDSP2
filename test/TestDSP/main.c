@@ -31,41 +31,43 @@ int main()
     
     Double* temp = RAlloc_Double(10000);
     Double* temp2 = RAlloc_Double(6000);
-    Double* wind = RAlloc_Double(3000);
-    CDSP2_VSet_Double(wind, 1, 3000);
-    CDSP2_Hanning_Double(wind, wind, 3000);
-    CDSP2_IWave_Double_SetWindow(& twave, wind, 2048);
+    Double* wind = RAlloc_Double(1024);
+    CDSP2_VSet_Double(wind, 1, 1024);
+    CDSP2_Hanning_Double(wind, wind, 1024);
+    CDSP2_IWave_Double_SetWindow(& twave, wind, 1024);
     
     for(i = 0; i < 3000; i ++)
-        temp[i] = sin(0.2f * i) + 1.0f;
+        temp[i] = sin(0.2f * i);
 
     CDSP2_IWave_Double_Add(& twave, temp, 15500, 3000);
     CDSP2_InfWave_Double_Submit(& twave, 18500);
     CDSP2_IWave_Double_WAdd(& twave, temp, 16500);
     CDSP2_IWave_Double_WAdd(& twave, temp, 17000);
-    //CDSP2_InfWave_Double_Read(& twave, temp, 15000, 3000);
-    //l = CDSP2_InfWave_Double_Dump(& twave, temp2);
-    //CDSP2_VSet_Double(temp2, 0, 6000);
     
     CDSP2_IWave_Double_WAdd(& twave, temp, 19000);
     CDSP2_InfWave_Double_Submit(& twave, 20500);
     
+    RFNL_FWindow_Gnrc_Double fwin;
+    RFNL_FWindow_Gnrc_Double_Ctor(& fwin);
+    CDSP2_FWindow_Double_SetPara(& fwin, 21, 1080, 50);
+    CDSP2_FWindow_Double_SetFunc(& fwin,
+        RFNL_Blackman_Size_Gnrc_Double, RFNL_Blackman_Valu_Gnrc_Double);
+    RFNL_FWindow_Gnrc_Double_Initialize(& fwin);
     
     CDSP2_Spectrum_Double spec;
-    CDSP2_Spectrum_Double_CtorSize(& spec, 2048);
-    spec.MagnType = CDSP2_LinearMagn;
-    spec.HalfSymm = 0;
-    //float temp[2048];
-    //int i;
-    //for(i = 0; i < 2048; i ++)
-    //    temp[i] = sin(i * 0.1) + sin(i * 0.2);
-    CDSP2_Spectrum_Double_FromWave(& spec, & twave, 17000);
-    CDSP2_Spectrum_Double_ToWaveA(& spec, & twave, 22000);
+    CDSP2_Spectrum_Double_CtorSize(& spec, 1024);
+    spec.MagnType = CDSP2_dBMagn;
+    spec.HalfSymm = 1;
+    
+    CDSP2_Spectrum_Double_FromWaveW(& spec, & twave, 19000);
+    CDSP2_VSet_Double(spec.Phse + 35, 0, 100);
+    CDSP2_Spectrum_Double_ToReal(& spec, temp);
     CDSP2_InfWave_Double_Submit(& twave, 25000);
     
-    l = CDSP2_InfWave_Double_Dump(& twave, temp);
-    for(i = 0; i < 10000; i ++)
-        printf("%f\n", temp[i]);
+    //l = CDSP2_InfWave_Double_Dump(& twave, temp);
+    //CDSP2_IWave_Double_FWRead(& twave, temp, & fwin, 22000, 500);
+    for(i = 0; i < 1024; i ++)
+        printf("%f\n", spec.Magn[i]);
 /*
     double Real[2048];
     double Imag[2048];
@@ -77,7 +79,7 @@ int main()
     RFree(temp2);
     RFree(wind);
     CDSP2_InfWave_Double_Dtor(& twave);
-    RDelete(& spec);
+    RDelete(& spec, & fwin);
     return 0;
 }
 

@@ -161,6 +161,12 @@ RTMethod(void, CDSP2_Spectrum, ToReal, _T1* Dest)
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
     _T1* TmpIm = RCall(RAlloc, _T1)(This -> Size);
     RCall(_RTClassName, _Arg2Cplx)(This, TmpRe, TmpIm, ValSize);
+    if(This -> HalfSymm)
+    {
+        //Complete FFT real symmetric structure
+        RCall(CDSP2_FFTReflect, _T1)(TmpRe, TmpIm, Power);
+    }
+    
     RCall(CDSP2_IRFFT, _T1)(Dest, TmpRe, TmpIm, Power);
     
     RFree(TmpRe);

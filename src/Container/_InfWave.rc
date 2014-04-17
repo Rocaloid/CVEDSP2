@@ -19,7 +19,7 @@ RDtor(_RTClassName)
     _C(CDSP2_Wave_, _T1, _Dtor)(_Base);
 }
 
-RTMethod(static int, CDSP_InfWave, VBoundCheck, int VPosition)
+RTMethod(static int, CDSP2_InfWave, VBoundCheck, int VPosition)
 {
     //Left edge
     if(VPosition < This -> VPosition)
