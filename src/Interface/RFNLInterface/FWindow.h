@@ -38,7 +38,14 @@ _CDSP2_Define_FP_FWindow(_CDSP2_FP_FWVDVR, Reset);
 typedef void (*_CDSP2_FP_FWIW2P_Float) (float* , float* , int);
 typedef void (*_CDSP2_FP_FWIW2P_Double)(double*, double*, int);
 
+typedef void (*_CDSP2_FP_FWIW1P_Float) (float* , int);
+typedef void (*_CDSP2_FP_FWIW1P_Double)(double*, int);
+
 _CDSP2_Define_FP_InstWindow(_CDSP2_FP_FWIW2P, Hanning);
 _CDSP2_Define_FP_InstWindow(_CDSP2_FP_FWIW2P, Hamming);
 _CDSP2_Define_FP_InstWindow(_CDSP2_FP_FWIW2P, Blackman);
+
+_CDSP2_Define_FP_InstWindow(_CDSP2_FP_FWIW1P, GenHanning);
+_CDSP2_Define_FP_InstWindow(_CDSP2_FP_FWIW1P, GenHamming);
+_CDSP2_Define_FP_InstWindow(_CDSP2_FP_FWIW1P, GenBlackman);
 

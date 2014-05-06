@@ -8,10 +8,13 @@ add_library(CVEDSP2 SHARED ${SRC_LIST})
 include_directories(CVEDSP2 PUBLIC "${CMAKE_SOURCE_DIR}/src")
 
 file(GLOB Header_Interface_RFNLInterface "Interface/RFNLInterface/*.h")
+file(GLOB Header_Container "Container/*.h")
 install(FILES Interface/Setting.h
-              DESTINATION /usr/include/CVEDSP2)
+              DESTINATION /usr/include/CVEDSP2/Interface)
 install(FILES ${Header_Interface_RFNLInterface}
-              DESTINATION /usr/include/CVEDSP2/RFNLInterface)
+              DESTINATION /usr/include/CVEDSP2/Interface/RFNLInterface)
+install(FILES ${Header_Container}
+              DESTINATION /usr/include/CVEDSP2/Container)
 install(FILES Include/CVEDSP2.h
               DESTINATION /usr/include/)
 

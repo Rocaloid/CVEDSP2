@@ -16,3 +16,7 @@ __CDSP2_InstWindow_SetArch(Hanning);
 __CDSP2_InstWindow_SetArch(Hamming);
 __CDSP2_InstWindow_SetArch(Blackman);
 
+__CDSP2_InstWindow_SetArch(GenHanning);
+__CDSP2_InstWindow_SetArch(GenHamming);
+__CDSP2_InstWindow_SetArch(GenBlackman);
+

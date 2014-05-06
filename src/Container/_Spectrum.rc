@@ -34,6 +34,65 @@ RTMethod(void, CDSP2_Spectrum, Resize, int Size)
     This -> Magn = (_T1*)realloc(This -> Magn, Size * sizeof(_T1));
 }
 
+#define _Spectrum _C(CDSP2_Spectrum, _, _T1)
+RTMethod(void, CDSP2_Spectrum, Copy, _Spectrum* Dest)
+{
+    RCall(_Spectrum, Resize)(Dest, This -> Size);
+    RCall(CDSP2_VCopy, _T1)(Dest -> Magn, This -> Magn, This -> Size);
+    RCall(CDSP2_VCopy, _T1)(Dest -> Phse, This -> Phse, This -> Size);
+    Dest -> Size = This -> Size;
+    Dest -> HalfSymm = This -> HalfSymm;
+    Dest -> MagnType = This -> MagnType;
+}
+#undef  _Spectrum
+
+RTMethod(void, CDSP2_Spectrum, MagnConv, int Type)
+{
+    if(Type == This -> MagnType)
+        return;
+    
+    int i;
+    int ValSize = This -> HalfSymm ? This -> Size / 2 + 1 : This -> Size;
+    
+    //TODO: Replace with vectorized log/log10 in RFNL.
+    if(This -> MagnType == CDSP2_LinearMagn &&
+       Type             == CDSP2_LogMagn)
+    {
+        for(i = 0; i < ValSize; i ++)
+            This -> Magn[i] = log(This -> Magn[i]);
+    }else if
+      (This -> MagnType == CDSP2_LinearMagn &&
+       Type             == CDSP2_dBMagn)
+    {
+        for(i = 0; i < ValSize; i ++)
+            This -> Magn[i] = 20.0 * log10(This -> Magn[i]);
+    }else if
+      (This -> MagnType == CDSP2_LogMagn &&
+       Type             == CDSP2_LinearMagn)
+    {
+        for(i = 0; i < ValSize; i ++)
+            This -> Magn[i] = exp(This -> Magn[i]);
+    }else if
+      (This -> MagnType == CDSP2_LogMagn &&
+       Type             == CDSP2_dBMagn)
+    {
+        for(i = 0; i < ValSize; i ++)
+            This -> Magn[i] = 0.43429 * 20.0 * This -> Magn[i];
+    }else if
+      (This -> MagnType == CDSP2_dBMagn &&
+       Type             == CDSP2_LinearMagn)
+    {
+        for(i = 0; i < ValSize; i ++)
+            This -> Magn[i] = exp10(This -> Magn[i] / 20.0);
+    }else if
+      (This -> MagnType == CDSP2_dBMagn &&
+       Type             == CDSP2_LogMagn)
+    {
+        for(i = 0; i < ValSize; i ++)
+            This -> Magn[i] = 2.3026 / 20.0 * This -> Magn[i];
+    }
+}
+
 RTMethod(void, CDSP2_Spectrum, FromWave, void* Sorc, int Position)
 {
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
@@ -81,7 +140,7 @@ RTMethod(void, CDSP2_Spectrum, _Arg2Cplx, _T1* TmpRe, _T1* TmpIm, int ValSize)
         Tmp = RCall(RAlloc, _T1)(ValSize);
         int i;
         for(i = 0; i < ValSize; i ++)
-            Tmp[i] = pow(2.718, This -> Magn[i]);
+            Tmp[i] = exp(This -> Magn[i]);
     }else if(This -> MagnType == CDSP2_dBMagn)
     {
         Tmp = RCall(RAlloc, _T1)(ValSize);
@@ -106,12 +165,23 @@ RTMethod(void, CDSP2_Spectrum, FromReal, _T1* Sorc)
 {
     int ValSize = This -> HalfSymm ? This -> Size / 2 + 1 : This -> Size;
     int Power = CDSP2_IntLogOf2(This -> Size);
+    int i;
+    _T1* Shifted = RCall(RAlloc, _T1)(This -> Size);
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
     _T1* TmpIm = RCall(RAlloc, _T1)(This -> Size);
-    RCall(CDSP2_RFFT, _T1)(TmpRe, TmpIm, Sorc, Power);
+    
+    //TODO: Implement vectorized FFTShift in RFNL.
+    
+    for(i = 0; i < This -> Size / 2; i ++)
+        Shifted[i] = Sorc[i + This -> Size / 2];
+    for(i = 0; i < This -> Size / 2; i ++)
+        Shifted[i + This -> Size / 2] = Sorc[i];
+    
+    RCall(CDSP2_RFFT, _T1)(TmpRe, TmpIm, Shifted, Power);
     
     RCall(_RTClassName, _Cplx2Arg)(This, TmpRe, TmpIm, ValSize);
     
+    RFree(Shifted);
     RFree(TmpRe);
     RFree(TmpIm);
 }
@@ -177,7 +247,7 @@ RTMethod(void, CDSP2_Spectrum, ToRealA, _T1* Dest)
 {
     _T1* Tmp = RCall(RAlloc, _T1)(This -> Size);
     RCall(_RTClassName, ToReal)(This, Tmp);
-    RCall(CDSP2_VAdd, _T1)(Dest, Dest, Tmp, This -> Size);    
+    RCall(CDSP2_VAdd, _T1)(Dest, Dest, Tmp, This -> Size);
     RFree(Tmp);
 }
 

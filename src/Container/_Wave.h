@@ -47,3 +47,5 @@ RTMethod(void, CDSP2_Wave, WWrite, _T1* Sorc, int LBound);
 //Windowed Additive Write
 RTMethod(void, CDSP2_Wave, WAdd, _T1* Sorc, int LBound);
 
+RTMethod(int, CDSP2_Wave, FromFile, String* Sorc);
+

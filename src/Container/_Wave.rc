@@ -227,3 +227,32 @@ void _C(CDSP2_IWave_, _T1, _WAdd)(void* This, _T1* Sorc, int LBound)
     RInterface_DefCall(_C(CDSP2_IWave_, _T1, _WAdd), This, Sorc, LBound);
 }
 
+RTMethod(int, CDSP2_Wave, FromFile, String* Sorc)
+{
+    WaveFile File;
+    WaveFile_Ctor(& File);
+    if(! WaveFile_Open(& File, Sorc))
+        return 0;
+    
+    if(File.Header.Channel != 1)
+        return 0;
+    
+    if(This -> Size < File.Header.DataNum)
+        _C(CDSP2_Wave_, _T1, _Resize)(This, File.Header.DataNum);
+    
+    #if _T1_TID == _TID_Float
+    WaveFile_FetchAllFloat(& File, This -> Data);
+    #else
+    float* Data = RAlloc_Float(This -> Size);
+    WaveFile_FetchAllFloat(& File, Data);
+
+    int i;
+    for(i = 0; i < This -> Size; i ++)
+        This -> Data[i] = Data[i];    
+    RFree(Data);
+    #endif
+    
+    WaveFile_Dtor(& File);
+    return 1;
+}
+

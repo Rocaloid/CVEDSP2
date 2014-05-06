@@ -3,5 +3,6 @@
 #endif
 
 #include <CVEDSP2/Interface/Setting.h>
-#include <CVEDSP2/Wave/Wave.h>
+#include <CVEDSP2/Container/Wave.h>
+#include <CVEDSP2/Container/Spectrum.h>
 

@@ -13,6 +13,9 @@ RClass(_RTClassName)
 RTMethod(void, CDSP2_Spectrum, CtorSize, int Size);
 RTMethod(void, CDSP2_Spectrum, Resize, int Size);
 
+RTMethod(void, CDSP2_Spectrum, Copy, _C(CDSP2_Spectrum, _, _T1)* Dest);
+RTMethod(void, CDSP2_Spectrum, MagnConv, int Type);
+
 RTMethod(void, CDSP2_Spectrum, FromWave, void* Sorc, int Position);
 RTMethod(void, CDSP2_Spectrum, FromWaveW, void* Sorc, int Position);
 RTMethod(void, CDSP2_Spectrum, FromReal, _T1* Sorc);
