@@ -26,9 +26,9 @@ RTMethod(int, CDSP2_InfWave, Write, _T1* Sorc, int LVPosition, int Size);
 //Additive Write
 RTMethod(int, CDSP2_InfWave, Add, _T1* Sorc, int LVPosition, int Size);
 //Windowed Read
-RTMethod(int, CDSP2_InfWave, WRead, _T1* Dest, int LVPosition);
+RTMethod(int, CDSP2_InfWave, ReadW, _T1* Dest, int LVPosition);
 //Windowed Overidding Write
-RTMethod(int, CDSP2_InfWave, WWrite, _T1* Sorc, int LVPosition);
+RTMethod(int, CDSP2_InfWave, WriteW, _T1* Sorc, int LVPosition);
 //Windowed Additive Write
-RTMethod(int, CDSP2_InfWave, WAdd, _T1* Sorc, int LVPosition);
+RTMethod(int, CDSP2_InfWave, AddW, _T1* Sorc, int LVPosition);
 

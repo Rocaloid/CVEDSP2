@@ -41,10 +41,10 @@ int main()
 
     CDSP2_IWave_Double_Add(& twave, temp, 15500, 3000);
     CDSP2_InfWave_Double_Submit(& twave, 18500);
-    CDSP2_IWave_Double_WAdd(& twave, temp, 16500);
-    CDSP2_IWave_Double_WAdd(& twave, temp, 17000);
+    CDSP2_IWave_Double_AddW(& twave, temp, 16500);
+    CDSP2_IWave_Double_AddW(& twave, temp, 17000);
     
-    CDSP2_IWave_Double_WAdd(& twave, temp, 19000);
+    CDSP2_IWave_Double_AddW(& twave, temp, 19000);
     CDSP2_InfWave_Double_Submit(& twave, 20500);
     
     RFNL_FWindow_Gnrc_Double fwin;

@@ -121,33 +121,33 @@ RTMethod(int, CDSP2_InfWave, Add, _T1* Sorc, int LVPosition, int Size)
 }
 _AddMethod(Add);
 
-//*** WRead ***
-RTMethod(int, CDSP2_InfWave, WRead, _T1* Dest, int LVPosition)
+//*** ReadW ***
+RTMethod(int, CDSP2_InfWave, ReadW, _T1* Dest, int LVPosition)
 {
     int Size = _Base -> WinSize;
     _IOWrap
-    _C(CDSP2_Wave_, _T1, _WRead)(_Base, Dest, LBound);
+    _C(CDSP2_Wave_, _T1, _ReadW)(_Base, Dest, LBound);
     return 1;
 }
-_AddMethod(WRead);
+_AddMethod(ReadW);
 
-//*** WWrite ***
-RTMethod(int, CDSP2_InfWave, WWrite, _T1* Sorc, int LVPosition)
+//*** WriteW ***
+RTMethod(int, CDSP2_InfWave, WriteW, _T1* Sorc, int LVPosition)
 {
     int Size = _Base -> WinSize;
     _IOWrap
-    _C(CDSP2_Wave_, _T1, _WWrite)(_Base, Sorc, LBound);
+    _C(CDSP2_Wave_, _T1, _WriteW)(_Base, Sorc, LBound);
     return 1;
 }
-_AddMethod(WWrite);
+_AddMethod(WriteW);
 
-//*** WAdd ***
-RTMethod(int, CDSP2_InfWave, WAdd, _T1* Sorc, int LVPosition)
+//*** AddW ***
+RTMethod(int, CDSP2_InfWave, AddW, _T1* Sorc, int LVPosition)
 {
     int Size = _Base -> WinSize;
     _IOWrap
-    _C(CDSP2_Wave_, _T1, _WAdd)(_Base, Sorc, LBound);
+    _C(CDSP2_Wave_, _T1, _AddW)(_Base, Sorc, LBound);
     return 1;
 }
-_AddMethod(WAdd);
+_AddMethod(AddW);
 

@@ -3,9 +3,9 @@ RInterface_Make(_C(CDSP2_IWave_, _T1, _SetWindow));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Read));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Write));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Add));
-RInterface_Make(_C(CDSP2_IWave_, _T1, _WRead));
-RInterface_Make(_C(CDSP2_IWave_, _T1, _WWrite));
-RInterface_Make(_C(CDSP2_IWave_, _T1, _WAdd));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _ReadW));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _WriteW));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _AddW));
 
 void _C(CDSP2_IWave_, _T1, _FWRead)
     (void* This, _T1* Dest, _C(RFNL_FWindow_Gnrc, _, _T1)* Wind,
@@ -189,42 +189,42 @@ void _C(CDSP2_IWave_, _T1, _Add)(void* This, _T1* Sorc, int LBound, int Size)
     RInterface_DefCall(_C(CDSP2_IWave_, _T1, _Add), This, Sorc, LBound, Size);
 }
 
-//*** WRead ***
-RTMethod(void, CDSP2_Wave, WRead, _T1* Dest, int LBound)
+//*** ReadW ***
+RTMethod(void, CDSP2_Wave, ReadW, _T1* Dest, int LBound)
 {
     RCall(_RTClassName, Read)(This, Dest, LBound, This -> WinSize);
     RCall(CDSP2_VMul, _T1)(Dest, Dest, This -> Window, This -> WinSize);
 }
-_AddMethod(WRead);
-void _C(CDSP2_IWave_, _T1, _WRead)(void* This, _T1* Sorc, int LBound)
+_AddMethod(ReadW);
+void _C(CDSP2_IWave_, _T1, _ReadW)(void* This, _T1* Sorc, int LBound)
 {
-    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _WRead), This, Sorc, LBound);
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _ReadW), This, Sorc, LBound);
 }
 
-//*** WWrite ***
-RTMethod(void, CDSP2_Wave, WWrite, _T1* Sorc, int LBound)
+//*** WriteW ***
+RTMethod(void, CDSP2_Wave, WriteW, _T1* Sorc, int LBound)
 {
     RCall(CDSP2_VMul, _T1)(This -> WinBuff, Sorc, This -> Window,
                            This -> WinSize);
     RCall(_RTClassName, Write)(This, This -> WinBuff, LBound, This -> WinSize);
 }
-_AddMethod(WWrite);
-void _C(CDSP2_IWave_, _T1, _WWrite)(void* This, _T1* Sorc, int LBound)
+_AddMethod(WriteW);
+void _C(CDSP2_IWave_, _T1, _WriteW)(void* This, _T1* Sorc, int LBound)
 {
-    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _WWrite), This, Sorc, LBound);
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _WriteW), This, Sorc, LBound);
 }
 
-//*** WAdd ***
-RTMethod(void, CDSP2_Wave, WAdd, _T1* Sorc, int LBound)
+//*** AddW ***
+RTMethod(void, CDSP2_Wave, AddW, _T1* Sorc, int LBound)
 {
     RCall(CDSP2_VMul, _T1)(This -> WinBuff, Sorc, This -> Window,
                            This -> WinSize);
     RCall(_RTClassName, Add)(This, This -> WinBuff, LBound, This -> WinSize);
 }
-_AddMethod(WAdd);
-void _C(CDSP2_IWave_, _T1, _WAdd)(void* This, _T1* Sorc, int LBound)
+_AddMethod(AddW);
+void _C(CDSP2_IWave_, _T1, _AddW)(void* This, _T1* Sorc, int LBound)
 {
-    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _WAdd), This, Sorc, LBound);
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _AddW), This, Sorc, LBound);
 }
 
 RTMethod(int, CDSP2_Wave, FromFile, String* Sorc)
