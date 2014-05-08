@@ -57,7 +57,6 @@ int main()
     CDSP2_Spectrum_Double spec;
     CDSP2_Spectrum_Double_CtorSize(& spec, 1024);
     spec.MagnType = CDSP2_dBMagn;
-    spec.HalfSymm = 1;
     
     CDSP2_Spectrum_Double_FromWaveW(& spec, & twave, 19000);
     CDSP2_VSet_Double(spec.Phse + 35, 0, 100);
@@ -67,7 +66,7 @@ int main()
     //l = CDSP2_InfWave_Double_Dump(& twave, temp);
     //CDSP2_IWave_Double_FWRead(& twave, temp, & fwin, 22000, 500);
     for(i = 0; i < 1024; i ++)
-        printf("%f\n", spec.Magn[i]);
+        printf("%f\n", temp[i]);
 /*
     double Real[2048];
     double Imag[2048];

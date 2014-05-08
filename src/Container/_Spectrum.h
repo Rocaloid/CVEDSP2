@@ -3,11 +3,14 @@ RClass(_RTClassName)
     RInherit(RObject);
     
     int Size;
-    int NoPhase;
-    int HalfSymm;
-    int MagnType;
+    
+    char NoPhase;
+    char MagnType;
+    
     _T1* Magn;
     _T1* Phse;
+    
+    int SampleRate;
 };
 
 RTMethod(void, CDSP2_Spectrum, CtorSize, int Size);

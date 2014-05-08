@@ -27,6 +27,8 @@ RClass(_RTClassName)
     _T1* Window;
     _T1* WinBuff;
     int  WinSize;
+    
+    int SampleRate;
 };
 
 RTMethod(void, CDSP2_Wave, CtorSize, int Size);
@@ -48,4 +50,5 @@ RTMethod(void, CDSP2_Wave, WriteW, _T1* Sorc, int LBound);
 RTMethod(void, CDSP2_Wave, AddW, _T1* Sorc, int LBound);
 
 RTMethod(int, CDSP2_Wave, FromFile, String* Sorc);
+RTMethod(int, CDSP2_Wave, ToFile, String* Dest);
 

@@ -4,9 +4,9 @@ RCtor(_RTClassName)
     This -> Size = 0;
     This -> Magn = NULL;
     This -> Phse = NULL;
-    This -> HalfSymm = 0;
     This -> NoPhase  = 0;
     This -> MagnType = CDSP2_LinearMagn;
+    This -> SampleRate = 44100;
 }
 
 RDtor(_RTClassName)
@@ -19,30 +19,30 @@ RTMethod(void, CDSP2_Spectrum, CtorSize, int Size)
 {
     RInit(_RTClassName);
     This -> Size = Size;
-    This -> Magn = RCall(RAlloc, _T1)(Size);
-    This -> Phse = RCall(RAlloc, _T1)(Size);
-    This -> HalfSymm = 0;
+    This -> Magn = RCall(RAlloc, _T1)(Size / 2 + 1);
+    This -> Phse = RCall(RAlloc, _T1)(Size / 2 + 1);
     This -> NoPhase  = 0;
     This -> MagnType = CDSP2_LinearMagn;
+    This -> SampleRate = 44100;
 }
 
 RTMethod(void, CDSP2_Spectrum, Resize, int Size)
 {
     This -> Size = Size;
     if(! This -> NoPhase)
-        This -> Phse = (_T1*)realloc(This -> Phse, Size * sizeof(_T1));
-    This -> Magn = (_T1*)realloc(This -> Magn, Size * sizeof(_T1));
+        This -> Phse = (_T1*)realloc(This -> Phse, Size * sizeof(_T1) / 2 + 1);
+    This -> Magn = (_T1*)realloc(This -> Magn, Size * sizeof(_T1) / 2 + 1);
 }
 
 #define _Spectrum _C(CDSP2_Spectrum, _, _T1)
 RTMethod(void, CDSP2_Spectrum, Copy, _Spectrum* Dest)
 {
     RCall(_Spectrum, Resize)(Dest, This -> Size);
-    RCall(CDSP2_VCopy, _T1)(Dest -> Magn, This -> Magn, This -> Size);
-    RCall(CDSP2_VCopy, _T1)(Dest -> Phse, This -> Phse, This -> Size);
+    RCall(CDSP2_VCopy, _T1)(Dest -> Magn, This -> Magn, This -> Size / 2 + 1);
+    RCall(CDSP2_VCopy, _T1)(Dest -> Phse, This -> Phse, This -> Size / 2 + 1);
     Dest -> Size = This -> Size;
-    Dest -> HalfSymm = This -> HalfSymm;
     Dest -> MagnType = This -> MagnType;
+    Dest  -> SampleRate = This -> SampleRate;
 }
 #undef  _Spectrum
 
@@ -52,7 +52,7 @@ RTMethod(void, CDSP2_Spectrum, MagnConv, int Type)
         return;
     
     int i;
-    int ValSize = This -> HalfSymm ? This -> Size / 2 + 1 : This -> Size;
+    int ValSize = This -> Size / 2 + 1;
     
     //TODO: Replace with vectorized log/log10 in RFNL.
     if(This -> MagnType == CDSP2_LinearMagn &&
@@ -93,12 +93,15 @@ RTMethod(void, CDSP2_Spectrum, MagnConv, int Type)
     }
 }
 
+#define _Wave _C(CDSP2_Wave, _, _T1)
+
 RTMethod(void, CDSP2_Spectrum, FromWave, void* Sorc, int Position)
 {
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
     _C(CDSP2_IWave_, _T1, _Read)(Sorc, TmpRe, Position, This -> Size);
     RCall(_RTClassName, FromReal)(This, TmpRe);
     RFree(TmpRe);
+    This -> SampleRate = ((_Wave*)Sorc) -> SampleRate;
 }
 
 RTMethod(void, CDSP2_Spectrum, FromWaveW, void* Sorc, int Position)
@@ -107,6 +110,7 @@ RTMethod(void, CDSP2_Spectrum, FromWaveW, void* Sorc, int Position)
     _C(CDSP2_IWave_, _T1, _ReadW)(Sorc, TmpRe, Position);
     RCall(_RTClassName, FromReal)(This, TmpRe);
     RFree(TmpRe);
+    This -> SampleRate = ((_Wave*)Sorc) -> SampleRate;
 }
 
 RTMethod(void, CDSP2_Spectrum, _Cplx2Arg, _T1* TmpRe, _T1* TmpIm, int ValSize)
@@ -132,8 +136,8 @@ RTMethod(void, CDSP2_Spectrum, _Arg2Cplx, _T1* TmpRe, _T1* TmpIm, int ValSize)
 {
     _T1* Tmp;
     
-    RCall(CDSP2_VSin, _T1)(TmpRe, This -> Phse, ValSize);
-    RCall(CDSP2_VCos, _T1)(TmpIm, This -> Phse, ValSize);
+    RCall(CDSP2_VCos, _T1)(TmpRe, This -> Phse, ValSize);
+    RCall(CDSP2_VSin, _T1)(TmpIm, This -> Phse, ValSize);
     //TODO: Implement vectorized log/log10 in RFNL.
     if(This -> MagnType == CDSP2_LogMagn)
     {
@@ -163,7 +167,7 @@ RTMethod(void, CDSP2_Spectrum, _Arg2Cplx, _T1* TmpRe, _T1* TmpIm, int ValSize)
 
 RTMethod(void, CDSP2_Spectrum, FromReal, _T1* Sorc)
 {
-    int ValSize = This -> HalfSymm ? This -> Size / 2 + 1 : This -> Size;
+    int ValSize = This -> Size / 2 + 1;
     int Power = CDSP2_IntLogOf2(This -> Size);
     int i;
     _T1* Shifted = RCall(RAlloc, _T1)(This -> Size);
@@ -196,7 +200,7 @@ RTMethod(void, CDSP2_Spectrum, FromRealW, _T1* Sorc, _T1* Window)
 
 RTMethod(void, CDSP2_Spectrum, FromCplx, _T1* Real, _T1* Imag)
 {
-    int ValSize = This -> HalfSymm ? This -> Size / 2 + 1 : This -> Size;
+    int ValSize = This -> Size / 2 + 1;
     int Power = CDSP2_IntLogOf2(This -> Size);
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
     _T1* TmpIm = RCall(RAlloc, _T1)(This -> Size);
@@ -214,6 +218,7 @@ RTMethod(void, CDSP2_Spectrum, ToWave, void* Dest, int Position)
     RCall(_RTClassName, ToReal)(This, Tmp);
     _C(CDSP2_IWave_, _T1, _Write)(Dest, Tmp, Position, This -> Size);
     RFree(Tmp);
+    ((_Wave*)Dest) -> SampleRate = This -> SampleRate;
 }
 
 RTMethod(void, CDSP2_Spectrum, ToWaveA, void* Dest, int Position)
@@ -222,25 +227,32 @@ RTMethod(void, CDSP2_Spectrum, ToWaveA, void* Dest, int Position)
     RCall(_RTClassName, ToReal)(This, Tmp);
     _C(CDSP2_IWave_, _T1, _Add)(Dest, Tmp, Position, This -> Size);
     RFree(Tmp);
+    ((_Wave*)Dest) -> SampleRate = This -> SampleRate;
 }
 
 RTMethod(void, CDSP2_Spectrum, ToReal, _T1* Dest)
 {
-    int ValSize = This -> HalfSymm ? This -> Size / 2 + 1 : This -> Size;
+    int ValSize = This -> Size / 2 + 1;
     int Power = CDSP2_IntLogOf2(This -> Size);
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
     _T1* TmpIm = RCall(RAlloc, _T1)(This -> Size);
+    _T1* Tmp = RCall(RAlloc, _T1)(This -> Size);
     RCall(_RTClassName, _Arg2Cplx)(This, TmpRe, TmpIm, ValSize);
-    if(This -> HalfSymm)
-    {
-        //Complete FFT real symmetric structure
-        RCall(CDSP2_FFTReflect, _T1)(TmpRe, TmpIm, Power);
-    }
     
-    RCall(CDSP2_IRFFT, _T1)(Dest, TmpRe, TmpIm, Power);
+    //Complete FFT real symmetric structure.
+    RCall(CDSP2_FFTReflect, _T1)(TmpRe, TmpIm, Power);
+    
+    RCall(CDSP2_IRFFT, _T1)(Tmp, TmpRe, TmpIm, Power);
+    
+    int i;
+    for(i = 0; i < This -> Size / 2; i ++)
+        Dest[i] = Tmp[i + This -> Size / 2];
+    for(i = 0; i < This -> Size / 2; i ++)
+        Dest[i + This -> Size / 2] = Tmp[i];
     
     RFree(TmpRe);
     RFree(TmpIm);
+    RFree(Tmp);
 }
 
 RTMethod(void, CDSP2_Spectrum, ToRealA, _T1* Dest)
@@ -253,7 +265,7 @@ RTMethod(void, CDSP2_Spectrum, ToRealA, _T1* Dest)
 
 RTMethod(void, CDSP2_Spectrum, ToCplx, _T1* Real, _T1* Imag)
 {
-    int ValSize = This -> HalfSymm ? This -> Size / 2 + 1 : This -> Size;
+    int ValSize = This -> Size / 2 + 1;
     int Power = CDSP2_IntLogOf2(This -> Size);
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
     _T1* TmpIm = RCall(RAlloc, _T1)(This -> Size);
@@ -263,4 +275,6 @@ RTMethod(void, CDSP2_Spectrum, ToCplx, _T1* Real, _T1* Imag)
     RFree(TmpRe);
     RFree(TmpIm);
 }
+
+#undef  _Wave
 

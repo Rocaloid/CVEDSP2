@@ -53,6 +53,7 @@ RCtor(_RTClassName)
     This -> WinBuff = NULL;
     This -> Window = NULL;
     This -> WinSize = 0;
+    This -> SampleRate = 44100;
     RInit(_RTClassName);
 }
 
@@ -70,6 +71,7 @@ RTMethod(void, CDSP2_Wave, CtorSize, int Size)
     This -> WinBuff = NULL;
     This -> Window = NULL;
     This -> WinSize = 0;
+    This -> SampleRate = 44100;
     RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
     RInit(_RTClassName);
 }
@@ -248,10 +250,34 @@ RTMethod(int, CDSP2_Wave, FromFile, String* Sorc)
 
     int i;
     for(i = 0; i < This -> Size; i ++)
-        This -> Data[i] = Data[i];    
+        This -> Data[i] = Data[i];
     RFree(Data);
     #endif
     
+    This -> SampleRate = File.Header.SamplePerSecond;
+    WaveFile_Dtor(& File);
+    return 1;
+}
+
+RTMethod(int, CDSP2_Wave, ToFile, String* Dest)
+{
+    WaveFile File;
+    WaveFile_Ctor(& File);
+    
+    File.Header.Channel = 1;
+    File.Header.SamplePerSecond = This -> SampleRate;
+    File.Header.BytePerSecond = This -> SampleRate * 2;
+    File.Header.BlockAlign = 2;
+    File.Header.BitPerSample = 16;
+    
+    if(! WaveFile_Save(& File, Dest))
+        return 0;
+    
+    WaveFile_WriteAllFloat(& File, This -> Data, This -> Size / 2);
+    
+    WaveFile_FinishWrite(& File);
+    WaveFile_Close(& File);
+
     WaveFile_Dtor(& File);
     return 1;
 }
