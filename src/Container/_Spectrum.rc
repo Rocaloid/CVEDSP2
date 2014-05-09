@@ -30,8 +30,9 @@ RTMethod(void, CDSP2_Spectrum, Resize, int Size)
 {
     This -> Size = Size;
     if(! This -> NoPhase)
-        This -> Phse = (_T1*)realloc(This -> Phse, Size * sizeof(_T1) / 2 + 1);
-    This -> Magn = (_T1*)realloc(This -> Magn, Size * sizeof(_T1) / 2 + 1);
+        This -> Phse = (_T1*)realloc(This -> Phse,
+            (1 + Size / 2) * sizeof(_T1));
+    This -> Magn = (_T1*)realloc(This -> Magn, (1 + Size / 2) * sizeof(_T1));
 }
 
 #define _Spectrum _C(CDSP2_Spectrum, _, _T1)
