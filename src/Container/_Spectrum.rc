@@ -35,17 +35,15 @@ RTMethod(void, CDSP2_Spectrum, Resize, int Size)
     This -> Magn = (_T1*)realloc(This -> Magn, (1 + Size / 2) * sizeof(_T1));
 }
 
-#define _Spectrum _C(CDSP2_Spectrum, _, _T1)
-RTMethod(void, CDSP2_Spectrum, Copy, _Spectrum* Dest)
+RTMethod(void, CDSP2_Spectrum, From, _RTClassName* Sorc)
 {
-    RCall(_Spectrum, Resize)(Dest, This -> Size);
-    RCall(CDSP2_VCopy, _T1)(Dest -> Magn, This -> Magn, This -> Size / 2 + 1);
-    RCall(CDSP2_VCopy, _T1)(Dest -> Phse, This -> Phse, This -> Size / 2 + 1);
-    Dest -> Size = This -> Size;
-    Dest -> MagnType = This -> MagnType;
-    Dest  -> SampleRate = This -> SampleRate;
+    RCall(_RTClassName, Resize)(This, Sorc -> Size);
+    RCall(CDSP2_VCopy, _T1)(This -> Magn, Sorc -> Magn, Sorc -> Size / 2 + 1);
+    RCall(CDSP2_VCopy, _T1)(This -> Phse, Sorc -> Phse, Sorc -> Size / 2 + 1);
+    This -> Size = Sorc -> Size;
+    This -> MagnType = Sorc -> MagnType;
+    This -> SampleRate = Sorc -> SampleRate;
 }
-#undef  _Spectrum
 
 RTMethod(void, CDSP2_Spectrum, MagnConv, int Type)
 {

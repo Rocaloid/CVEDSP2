@@ -6,6 +6,7 @@ RClass(_RTClassName)
     
     char NoPhase;
     char MagnType;
+    char _Pad[2];
     
     _T1* Magn;
     _T1* Phse;
@@ -16,7 +17,7 @@ RClass(_RTClassName)
 RTMethod(void, CDSP2_Spectrum, CtorSize, int Size);
 RTMethod(void, CDSP2_Spectrum, Resize, int Size);
 
-RTMethod(void, CDSP2_Spectrum, Copy, _C(CDSP2_Spectrum, _, _T1)* Dest);
+RTMethod(void, CDSP2_Spectrum, From, _RTClassName* Sorc);
 RTMethod(void, CDSP2_Spectrum, MagnConv, int Type);
 
 RTMethod(void, CDSP2_Spectrum, FromWave, void* Sorc, int Position);
