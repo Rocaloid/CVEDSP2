@@ -1,5 +1,6 @@
 #undef  _Base
 #define _Base MyBase(_C(CDSP2_Wave, _, _T1))
+#define _Wave _C(CDSP2_Wave, _, _T1)
 
 #undef  _AddMethod
 #define _AddMethod(Name) \
@@ -8,7 +9,7 @@
 
 RCtor(_RTClassName)
 {
-    _C(CDSP2_Wave_, _T1, _Ctor)(_Base);
+    RCall(_Wave, Ctor)(_Base);
     This -> VPosition = 0;
     This -> SPosition = 0;
     RInit(_RTClassName);
@@ -16,7 +17,7 @@ RCtor(_RTClassName)
 
 RDtor(_RTClassName)
 {
-    _C(CDSP2_Wave_, _T1, _Dtor)(_Base);
+    RCall(_Wave, Dtor)(_Base);
 }
 
 RTMethod(static int, CDSP2_InfWave, VBoundCheck, int VPosition)
@@ -33,16 +34,24 @@ RTMethod(static int, CDSP2_InfWave, VBoundCheck, int VPosition)
 //*** CtorSize ***
 RTMethod(void, CDSP2_InfWave, CtorSize, int Size)
 {
-    _C(CDSP2_Wave_, _T1, _CtorSize)(_Base, Size);
+    RCall(_Wave, CtorSize)(_Base, Size);
     RInit(_RTClassName);
 }
 
 //*** Resize ***
 RTMethod(void, CDSP2_InfWave, Resize, int Size)
 {
-    _C(CDSP2_Wave_, _T1, _Resize)(_Base, Size);
+    RCall(_Wave, Resize)(_Base, Size);
 }
 _AddMethod(Resize);
+
+RTMethod(void, CDSP2_InfWave, From, _RTClassName* Sorc)
+{
+    RCall(_Wave, From)(_Base, (_Wave*)Sorc);
+    This -> VPosition = Sorc -> VPosition;
+    This -> SPosition = Sorc -> SPosition;
+}
+_AddMethod(From);
 
 //*** Relocate ***
 RTMethod(int, CDSP2_InfWave, Relocate, int VPosition)
@@ -76,6 +85,20 @@ RTMethod(int, CDSP2_InfWave, Dump, _T1* Dest)
     int Length = This -> SPosition - This -> VPosition;
     //Dump
     RCall(CDSP2_VCopy, _T1)(Dest, _Base -> Data, Length);
+    //Restore TODO:SIMDlize
+    for(i = This -> SPosition; i < This -> VPosition + _Base -> Size; i ++)
+        _Base -> Data[i - This -> SPosition] = 
+            _Base -> Data[i - This -> VPosition];
+    This -> VPosition = This -> SPosition;
+    
+    return Length;
+}
+
+//*** Throw ***
+RTMethod(int, CDSP2_InfWave, Throw)
+{
+    int i;
+    int Length = This -> SPosition - This -> VPosition;
     //Restore TODO:SIMDlize
     for(i = This -> SPosition; i < This -> VPosition + _Base -> Size; i ++)
         _Base -> Data[i - This -> SPosition] = 
@@ -150,4 +173,6 @@ RTMethod(int, CDSP2_InfWave, AddW, _T1* Sorc, int LVPosition)
     return 1;
 }
 _AddMethod(AddW);
+
+#undef  _Wave
 

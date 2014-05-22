@@ -4,13 +4,14 @@ RClass(_RTClassName)
 {
     RInherit(_TBase);
     
-    int APosition;  //Absolute Position
+    //Private
     int VPosition;  //Virtual Position
     int SPosition;  //Submitted Position
 };
 
 RTMethod(void, CDSP2_InfWave, CtorSize, int Size);
 RTMethod(void, CDSP2_InfWave, Resize, int Size);
+RTMethod(void, CDSP2_InfWave, From, _RTClassName* Sorc);
 
 RTMethod(int, CDSP2_InfWave, Relocate, int VPosition);
 RTMethod(int, CDSP2_InfWave, Submit, int VPosition);
@@ -19,6 +20,8 @@ RTMethod(void, CDSP2_InfWave, SetWindow, _T1* Sorc, int Size);
 
 //Dump
 RTMethod(int, CDSP2_InfWave, Dump, _T1* Dest);
+//Throw
+RTMethod(int, CDSP2_InfWave, Throw);
 //Read
 RTMethod(int, CDSP2_InfWave, Read, _T1* Dest, int LVPosition, int Size);
 //Overridding Write

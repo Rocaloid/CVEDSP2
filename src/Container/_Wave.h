@@ -1,4 +1,5 @@
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _Resize), void*, int);
+RInterface_Define(void, _C(CDSP2_IWave_, _T1, _From), void*, void*);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _SetWindow), void*, _T1*, int);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _Read), void*, _T1*, int, int);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _Write), void*, _T1*, int, int);
@@ -21,18 +22,20 @@ RClass(_RTClassName)
 {
     RInherit(RObject);
     
+    //Public
     _T1* Data;
     int  Size;
-    
+    int  SampleRate;
     _T1* Window;
-    _T1* WinBuff;
     int  WinSize;
     
-    int SampleRate;
+    //Private
+    _T1* WinBuff;
 };
 
 RTMethod(void, CDSP2_Wave, CtorSize, int Size);
 RTMethod(void, CDSP2_Wave, Resize, int Size);
+RTMethod(void, CDSP2_Wave, From, _RTClassName* Sorc);
 
 RTMethod(void, CDSP2_Wave, SetWindow, _T1* Sorc, int Size);
 

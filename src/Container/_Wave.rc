@@ -1,4 +1,5 @@
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Resize));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _From));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _SetWindow));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Read));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Write));
@@ -87,6 +88,19 @@ _AddMethod(Resize);
 void _C(CDSP2_IWave_, _T1, _Resize)(void* This, int Size)
 {
     RInterface_DefCall(_C(CDSP2_IWave_, _T1, _Resize), This, Size);
+}
+
+//*** From ***
+RTMethod(void, CDSP2_Wave, From, _RTClassName* Sorc)
+{
+    This -> Size = Sorc -> Size;
+    This -> Data = (_T1*)realloc(This -> Data, This -> Size * sizeof(_T1));
+    RCall(CDSP2_VCopy, _T1)(This -> Data, Sorc -> Data, This -> Size);
+}
+_AddMethod(From);
+void _C(CDSP2_IWave_, _T1, _From)(void* This, void* Sorc)
+{
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _From), This, Sorc);
 }
 
 //*** SetWindow ***
@@ -273,7 +287,7 @@ RTMethod(int, CDSP2_Wave, ToFile, String* Dest)
     if(! WaveFile_Save(& File, Dest))
         return 0;
     
-    WaveFile_WriteAllFloat(& File, This -> Data, This -> Size / 2);
+    WaveFile_WriteAllFloat(& File, This -> Data, This -> Size);
     
     WaveFile_FinishWrite(& File);
     WaveFile_Close(& File);

@@ -4,5 +4,6 @@
 
 #include <CVEDSP2/Interface/Setting.h>
 #include <CVEDSP2/Container/Wave.h>
+#include <CVEDSP2/Container/InfWave.h>
 #include <CVEDSP2/Container/Spectrum.h>
 
