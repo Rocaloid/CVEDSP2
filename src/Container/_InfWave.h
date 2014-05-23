@@ -15,6 +15,7 @@ RTMethod(void, CDSP2_InfWave, From, _RTClassName* Sorc);
 
 RTMethod(int, CDSP2_InfWave, Relocate, int VPosition);
 RTMethod(int, CDSP2_InfWave, Submit, int VPosition);
+RTMethod(_T1*, CDSP2_InfWave, GetUnsafePtr);
 
 RTMethod(void, CDSP2_InfWave, SetWindow, _T1* Sorc, int Size);
 

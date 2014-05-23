@@ -1,6 +1,7 @@
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Resize));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _From));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _SetWindow));
+RInterface_Make(_C(CDSP2_IWave_, _T1, _GetUnsafePtr));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Read));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Write));
 RInterface_Make(_C(CDSP2_IWave_, _T1, _Add));
@@ -114,6 +115,17 @@ _AddMethod(SetWindow);
 void _C(CDSP2_IWave_, _T1, _SetWindow)(void* This, _T1* Sorc, int Size)
 {
     RInterface_DefCall(_C(CDSP2_IWave_, _T1, _SetWindow), This, Sorc, Size);
+}
+
+//*** GetUnsafePtr ***
+RTMethod(_T1*, CDSP2_Wave, GetUnsafePtr)
+{
+    return This -> Data;
+}
+_AddMethod(GetUnsafePtr);
+_T1* _C(CDSP2_IWave_, _T1, _GetUnsafePtr)(void* This)
+{
+    RInterface_DefCall(_C(CDSP2_IWave_, _T1, _GetUnsafePtr), This);
 }
 
 //*** Read ***
