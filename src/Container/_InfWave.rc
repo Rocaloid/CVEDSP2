@@ -76,6 +76,7 @@ RTMethod(_T1*, CDSP2_InfWave, GetUnsafePtr)
 {
     return ((_Wave*)This) -> Data - This -> VPosition;
 }
+_AddMethod(GetUnsafePtr);
 
 //*** SetWindow ***
 RTMethod(void, CDSP2_InfWave, SetWindow, _T1* Sorc, int Size)
