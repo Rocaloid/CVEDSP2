@@ -22,7 +22,7 @@ int main()
         printf("%f\n", temp[i]);
     RFree(temp);
     CDSP2_Wave_Double_Dtor(& twave);*/
-    
+    CDSP2_SetDebugOn(CDSP2_Debug_Check);
     
     int i, l;
     CDSP2_InfWave_Double twave;
@@ -34,7 +34,7 @@ int main()
     Double* wind = RAlloc_Double(1024);
     CDSP2_VSet_Double(wind, 1, 1024);
     CDSP2_Hanning_Double(wind, wind, 1024);
-    CDSP2_IWave_Double_SetWindow(& twave, wind, 1024);
+    //CDSP2_IWave_Double_SetWindow(& twave, wind, 1024);
     
     for(i = 0; i < 3000; i ++)
         temp[i] = sin(0.2f * i);
