@@ -9,13 +9,13 @@ RInterface_Define(void, _C(CDSP2_IWave_, _T1, _ReadW), void*, _T1*, int);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _WriteW), void*, _T1*, int);
 RInterface_Define(void, _C(CDSP2_IWave_, _T1, _AddW), void*, _T1*, int);
 
-void _C(CDSP2_IWave_, _T1, _FReadW)
+void _C(CDSP2_IWave_, _T1, _FWRead)
     (void* This, _T1* Dest, _C(RFNL_FWindow_Gnrc, _, _T1)* Wind,
     int Position, int Size);
-void _C(CDSP2_IWave_, _T1, _FWriteW)
+void _C(CDSP2_IWave_, _T1, _FWWrite)
     (void* This, _T1* Sorc, _C(RFNL_FWindow_Gnrc, _, _T1)* Wind,
     int Position, int Size);
-void _C(CDSP2_IWave_, _T1, _FAddW)
+void _C(CDSP2_IWave_, _T1, _FWAdd)
     (void* This, _T1* Sorc, _C(RFNL_FWindow_Gnrc, _, _T1)* Wind,
     int Position, int Size);
 
