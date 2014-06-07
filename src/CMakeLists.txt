@@ -18,5 +18,9 @@ install(FILES ${Header_Container}
 install(FILES Include/CVEDSP2.h
               DESTINATION /usr/include/)
 
-install(TARGETS CVEDSP2 LIBRARY DESTINATION /usr/lib)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    install(TARGETS CVEDSP2 LIBRARY DESTINATION /usr/lib64)
+else(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    install(TARGETS CVEDSP2 LIBRARY DESTINATION /usr/lib)
+endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
