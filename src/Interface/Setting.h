@@ -3,10 +3,14 @@
 
 #include <RUtil2.h>
 
+#define __CDSP2_DEF_PREFIX extern
+
 #include "RFNLInterface/Vec.h"
 #include "RFNLInterface/DFT.h"
 #include "RFNLInterface/FWindow.h"
 #include "RFNLInterface/Interp.h"
+
+#undef  __CDSP2_DEF_PREFIX
 
 typedef enum
 {
@@ -17,8 +21,8 @@ typedef enum
 
 #define CDSP2_Debug_Check 0
 
-CDSP2_CPUArch _CDSP2_Arch;
-int CDSP2_Debug_CheckFlag;
+extern CDSP2_CPUArch _CDSP2_Arch;
+extern int CDSP2_Debug_CheckFlag;
 
 int CDSP2_SetArch(CDSP2_CPUArch Sorc);
 void CDSP2_SetDebugOn(int Sorc);

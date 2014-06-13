@@ -1,7 +1,17 @@
 #include "Setting.h"
 #include <RFNL.h>
 
-CDSP2_CPUArch _CDSP2_Arch = CDSP2_Arch_Gnrc;
+#define __CDSP2_DEF_PREFIX
+
+#include "RFNLInterface/Vec.h"
+#include "RFNLInterface/DFT.h"
+#include "RFNLInterface/FWindow.h"
+#include "RFNLInterface/Interp.h"
+
+#undef  __CDSP2_DEF_PREFIX
+
+CDSP2_CPUArch _CDSP2_Arch;
+int CDSP2_Debug_CheckFlag;
 
 void __attribute__ ((constructor)) _CDSP2_LoadArch()
 {

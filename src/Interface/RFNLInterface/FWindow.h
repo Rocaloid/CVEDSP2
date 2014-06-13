@@ -1,8 +1,8 @@
 #include <RFNL.h>
 
 #define _CDSP2_Define_FP_FWindow(Type, Name) \
-    _C(Type, _, Float )  _C(CDSP2_FWindow_Float , _, Name); \
-    _C(Type, _, Double)  _C(CDSP2_FWindow_Double, _, Name)
+     __CDSP2_DEF_PREFIX _C(Type, _, Float ) _C(CDSP2_FWindow_Float , _, Name); \
+     __CDSP2_DEF_PREFIX _C(Type, _, Double) _C(CDSP2_FWindow_Double, _, Name)
 
 typedef void (*_CDSP2_FP_FW3C_Float)
     (RFNL_FWindow_Gnrc_Float* , float , float , float );
@@ -32,8 +32,8 @@ _CDSP2_Define_FP_FWindow(_CDSP2_FP_FW1P1C, Generate);
 _CDSP2_Define_FP_FWindow(_CDSP2_FP_FWVDVR, Reset);
 
 #define _CDSP2_Define_FP_InstWindow(Type, Name) \
-    _C(Type, _, Float ) _C(CDSP2_, Name, _Float); \
-    _C(Type, _, Double) _C(CDSP2_, Name, _Double)
+    __CDSP2_DEF_PREFIX _C(Type, _, Float ) _C(CDSP2_, Name, _Float); \
+    __CDSP2_DEF_PREFIX _C(Type, _, Double) _C(CDSP2_, Name, _Double)
 
 typedef void (*_CDSP2_FP_FWIW2P_Float) (float* , float* , int);
 typedef void (*_CDSP2_FP_FWIW2P_Double)(double*, double*, int);

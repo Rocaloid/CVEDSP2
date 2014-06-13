@@ -82,7 +82,7 @@ RTMethod(void, CDSP2_Spectrum, MagnConv, int Type)
        Type             == CDSP2_LinearMagn)
     {
         for(i = 0; i < ValSize; i ++)
-            This -> Magn[i] = exp10(This -> Magn[i] / 20.0);
+            This -> Magn[i] = pow(10.0, This -> Magn[i] / 20.0);
     }else if
       (This -> MagnType == CDSP2_dBMagn &&
        Type             == CDSP2_LogMagn)

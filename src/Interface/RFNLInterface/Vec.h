@@ -1,8 +1,8 @@
 #include <RFNL.h>
 
 #define _CDSP2_Define_FP_FD(Type, Name) \
-    _C(Type, _, Float)  _C(Name, _, Float ); \
-    _C(Type, _, Double) _C(Name, _, Double)
+    __CDSP2_DEF_PREFIX _C(Type, _, Float)  _C(Name, _, Float ); \
+    __CDSP2_DEF_PREFIX _C(Type, _, Double) _C(Name, _, Double)
 
 typedef void (*_CDSP2_FP_Vec6P_Float) (float* , float* , float* ,
                                        float* , float* , float* , int);
