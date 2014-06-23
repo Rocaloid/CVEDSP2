@@ -280,5 +280,31 @@ RTMethod(void, CDSP2_Spectrum, ToCplx, _T1* Real, _T1* Imag)
     RFree(TmpIm);
 }
 
+RTMethod(_RTClassName*, CDSP2_Spectrum, AllocConvSpecRO, char MagnType)
+{
+    _RTClassName* Ret;
+    
+    if(This -> MagnType == MagnType)
+        Ret = This;
+    else
+    {
+        Ret = RAlloc_Class(_RTClassName, 1);
+        RCall(_RTClassName, Ctor)(Ret);
+        RCall(_RTClassName, From)(Ret, This);
+        RCall(_RTClassName, MagnConv)(Ret, MagnType);
+    }
+    
+    return Ret;
+}
+
+RTMethod(_RTClassName*, CDSP2_Spectrum, FreeConvSpecRO, _RTClassName* Dest)
+{
+    if(Dest != This)
+    {
+        RCall(_RTClassName, Dtor)(Dest);
+        RFree(Dest);
+    }
+}
+
 #undef  _Wave
 

@@ -32,3 +32,6 @@ RTMethod(void, CDSP2_Spectrum, ToReal, _T1* Sorc);
 RTMethod(void, CDSP2_Spectrum, ToRealA, _T1* Sorc);
 RTMethod(void, CDSP2_Spectrum, ToCplx, _T1* Real, _T1* Imag);
 
+RTMethod(_RTClassName*, CDSP2_Spectrum, AllocConvSpecRO, char MagnType);
+RTMethod(_RTClassName*, CDSP2_Spectrum, FreeConvSpecRO, _RTClassName* Dest);
+
