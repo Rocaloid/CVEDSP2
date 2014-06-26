@@ -286,7 +286,7 @@ RTMethod(int, CDSP2_Wave, FromFile, String* Sorc)
 
     int i;
     for(i = 0; i < This -> Size; i ++)
-        This -> Data[i] = Data[i];
+        This -> Data[i] = (double)Data[i];
     RFree(Data);
     #endif
     
@@ -309,7 +309,17 @@ RTMethod(int, CDSP2_Wave, ToFile, String* Dest)
     if(! WaveFile_Save(& File, Dest))
         return 0;
     
+    #if _T1_TID == _TID_Float
     WaveFile_WriteAllFloat(& File, This -> Data, This -> Size);
+    #else
+    float* Data = RAlloc_Float(This -> Size);
+    int i;
+    for(i = 0; i < This -> Size; i ++)
+        Data[i] = (float)This -> Data[i];
+    
+    WaveFile_WriteAllFloat(& File, Data, This -> Size);
+    RFree(Data);
+    #endif
     
     WaveFile_FinishWrite(& File);
     WaveFile_Close(& File);
