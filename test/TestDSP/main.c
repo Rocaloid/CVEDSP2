@@ -1,5 +1,6 @@
 #include "Interface/Setting.h"
 #include "Container/InfWave.h"
+#include "Container/Wave.h"
 #include "Container/Spectrum.h"
 #include <RFNL.h>
 
@@ -67,6 +68,7 @@ int main()
     //CDSP2_IWave_Double_FWRead(& twave, temp, & fwin, 22000, 500);
     for(i = 0; i < 1024; i ++)
         printf("%f\n", temp[i]);
+    
 /*
     double Real[2048];
     double Imag[2048];

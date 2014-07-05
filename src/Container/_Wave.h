@@ -40,6 +40,7 @@ RTMethod(void, CDSP2_Wave, From, _RTClassName* Sorc);
 
 RTMethod(void, CDSP2_Wave, SetWindow, _T1* Sorc, int Size);
 
+RTMethod(_T1*, CDSP2_Wave, GetUnsafePtr);
 //Read
 RTMethod(void, CDSP2_Wave, Read, _T1* Dest, int LBound, int Size);
 //Overridding Write

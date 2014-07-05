@@ -27,8 +27,8 @@ if(CYGWIN OR WIN32)
                             RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(STATUS "You are compiling this project as 64bit.")
-    install(TARGETS CVEDSP2 LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib64
-                            ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib64
+    install(TARGETS CVEDSP2 LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+                            ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
                             RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     message(STATUS "You are compiling this project as 32bit.")
