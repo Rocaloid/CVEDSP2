@@ -24,7 +24,8 @@ int main()
     CDSP2_Wave_Double_Dtor(& twave);*/
     CDSP2_SetDebugOn(CDSP2_Debug_Check);
     
-    int i, l;
+    int i;
+    // int l;
     CDSP2_InfWave_Double twave;
     CDSP2_InfWave_Double_CtorSize(& twave, 10000);
     CDSP2_InfWave_Double_Relocate(& twave, 15000);
