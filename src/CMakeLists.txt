@@ -2,7 +2,7 @@ aux_source_directory(./Interface SRC_LIST)
 aux_source_directory(./Container SRC_LIST)
 aux_source_directory(./ SRC_LIST)
 
-set(CMAKE_C_FLAGS "-Ofast -I${TopDir}/src")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${TopDir}/src")
 
 add_library(CVEDSP2 SHARED ${SRC_LIST})
 include_directories(CVEDSP2 PUBLIC "${CMAKE_SOURCE_DIR}/src")
