@@ -23,7 +23,6 @@ int main()
         printf("%f\n", temp[i]);
     RFree(temp);
     CDSP2_Wave_Double_Dtor(& twave);*/
-    CDSP2_SetDebugOn(CDSP2_Debug_Check);
     
     int i, l;
     CDSP2_InfWave_Double twave;

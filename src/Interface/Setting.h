@@ -17,19 +17,13 @@ typedef enum
     CDSP2_Arch_Gnrc = 0,
     CDSP2_Arch_SSE = 1,
     CDSP2_Arch_AVX = 2
-} CDSP2_CPUArch;
+} CDSP2_ArchType;
 
 #define CDSP2_Debug_Check 0
 
-extern CDSP2_CPUArch _CDSP2_Arch;
-extern int CDSP2_Debug_CheckFlag;
+extern CDSP2_ArchType CDSP2_Arch;
 
-int CDSP2_SetArch(CDSP2_CPUArch Sorc);
-void CDSP2_SetDebugOn(int Sorc);
-void CDSP2_SetDebugOff(int Sorc);
-
-#define CDSP2_If_Debug_Check(Arg) \
-    if(CDSP2_Debug_CheckFlag) {Arg}
+int CDSP2_SetArch(CDSP2_ArchType Sorc);
 
 #endif
 
