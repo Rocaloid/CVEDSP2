@@ -10,7 +10,7 @@ int main()
         RFNL_Blackman_Size_Gnrc_Float, RFNL_Blackman_Valu_Gnrc_Float);
     CDSP2_FWindow_Float_Initialize(& fwin);
     
-    int i;
+    // int i;
     float Dest[1024];
     float Wind[1024];
     CDSP2_VSet_Float(Wind, 1, 1024);

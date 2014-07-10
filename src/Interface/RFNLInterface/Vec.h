@@ -4,6 +4,9 @@
     __CDSP2_DEF_PREFIX _C(Type, _, Float)  _C(Name, _, Float ); \
     __CDSP2_DEF_PREFIX _C(Type, _, Double) _C(Name, _, Double)
 
+#ifndef CDSP2_VEC_H
+#define CDSP2_VEC_H
+
 typedef void (*_CDSP2_FP_Vec6P_Float) (float* , float* , float* ,
                                        float* , float* , float* , int);
 typedef void (*_CDSP2_FP_Vec6P_Double)(double*, double*, double*,
@@ -23,6 +26,8 @@ typedef void (*_CDSP2_FP_Vec1P1C_Double)(double*, double, int);
 
 typedef float  (*_CDSP2_FP_Vec1P2I_Float) (float* , int, int);
 typedef double (*_CDSP2_FP_Vec1P2I_Double)(double*, int, int);
+
+#endif
 
 _CDSP2_Define_FP_FD(_CDSP2_FP_Vec3P, CDSP2_VAdd);
 _CDSP2_Define_FP_FD(_CDSP2_FP_Vec3P, CDSP2_VSub);
