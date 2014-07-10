@@ -105,11 +105,9 @@ RTMethod(void, CDSP2_Spectrum, FromWave, void* Sorc, int Position)
 
 RTMethod(void, CDSP2_Spectrum, FromWaveW, void* Sorc, int Position)
 {
-    CDSP2_If_Debug_Check
-    (
-        if(This -> Size != ((_Wave*)Sorc) -> WinSize)
-            RDebugPrint(_RTClassName, "FromWaveW: incompatible window size.");
-    )
+    RAssert(This -> Size == ((_Wave*)Sorc) -> WinSize,
+        "incompatible window size.");
+    
     _T1* TmpRe = RCall(RAlloc, _T1)(This -> Size);
     _C(CDSP2_IWave_, _T1, _ReadW)(Sorc, TmpRe, Position);
     RCall(_RTClassName, FromReal)(This, TmpRe);
