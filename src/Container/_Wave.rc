@@ -85,8 +85,9 @@ RTMethod(void, CDSP2_Wave, CtorSize, int Size)
 RTMethod(void, CDSP2_Wave, Resize, int Size)
 {
     This -> Data = (_T1*)realloc(This -> Data, Size * sizeof(_T1));
+    //Initialize
+    RCall(CDSP2_VSet, _T1)(This -> Data + This -> Size, 0, Size - This -> Size);
     This -> Size = Size;
-    RCall(CDSP2_VSet, _T1)(This -> Data, 0, Size); //Initialize
 }
 _AddMethod(Resize);
 void _C(CDSP2_IWave_, _T1, _Resize)(void* This, int Size)

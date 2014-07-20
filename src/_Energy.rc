@@ -1,0 +1,33 @@
+#define _IWave _C(CDSP2_IWave, _, _T1)
+
+RTFunc(_T1, CDSP2_EnergyFromWave, void* Sorc, int LBound, int Size)
+{
+    _T1* Real = RCall(RAlloc, _T1)(Size);
+    int i;
+    _T1 Ret = 0;
+    
+    RCall(_IWave, Read)(Sorc, Real, LBound, Size);
+    
+    //DC Removal
+    _T1 DC = RCall(CDSP2_VSum, _T1)(Real, 0, Size) / (_T1)Size;
+    RCall(CDSP2_VCSub, _T1)(Real, Real, DC, Size);
+    
+    for(i = 0; i < Size; i ++)
+        Ret += Real[i] * Real[i];
+    RFree(Real);
+    return Ret;
+}
+
+RTFunc(_T1, CDSP2_MeanEnergyFromWave, void* Sorc, int LBound, int Size)
+{
+    return RCall(CDSP2_EnergyFromWave, _T1)(Sorc, LBound, Size) / (_T1)Size;
+}
+
+RTFunc(_T1, CDSP2_MeanEnergyFromWaveDB, void* Sorc, int LBound, int Size)
+{
+    return 20.0 * log10(RCall(CDSP2_MeanEnergyFromWave, _T1)
+        (Sorc, LBound, Size));
+}
+
+#undef _IWave
+
