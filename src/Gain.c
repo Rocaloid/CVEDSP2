@@ -1,5 +1,5 @@
 #include "Gain.h"
-#include "ShortTime.h"
+#include "WaveUtils.h"
 #include <math.h>
 
 #if 0

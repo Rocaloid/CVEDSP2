@@ -1,5 +1,5 @@
-#ifndef CDSP2_SHORTTIME_H
-#define CDSP2_SHORTTIME_H
+#ifndef CDSP2_WAVEUTILS_H
+#define CDSP2_WAVEUTILS_H
 
 #include "Container/Wave.h"
 #include <RUtil2.h>

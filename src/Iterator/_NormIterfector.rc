@@ -27,6 +27,7 @@ RCtor(_RTClassName)
     This -> Intensity = -45;
     This -> HopSize = 256;
     This -> Wave = NULL;
+    This -> ECurve = NULL;
     This -> LastPosition = 0;
     This -> InitPosition = 0;
     RInit(_RTClassName);
@@ -47,6 +48,11 @@ RTMethod(void, CDSP2_NormIterfector, SetWave, void* Sorc)
 RTMethod(void, CDSP2_NormIterfector, SetOutWave, void* Sorc)
 {
     RCall(_Gain, SetOutWave)(This -> Subsizer, Sorc);
+}
+
+RTMethod(void, CDSP2_NormIterfector, SetEnergyWave, void* Sorc)
+{
+    This -> ECurve = Sorc;
 }
 
 RTMethod(void, CDSP2_NormIterfector, SetHopSize, int HopSize)
@@ -72,8 +78,16 @@ RTMethod(void, CDSP2_NormIterfector, SetPosition, int Position)
 }
 
 #define _NormCore() \
-    _T1 Local = RCall(CDSP2_MeanEnergyFromWaveDB, _T1) \
-        (This -> Wave, This -> LastPosition - 256, 512); \
+    _T1 Local; \
+    if(! This -> ECurve) \
+    { \
+        Local = RCall(CDSP2_MeanEnergyFromWaveDB, _T1) \
+            (This -> Wave, This -> LastPosition - 256, 512); \
+    }else \
+    { \
+        _T1* EPtr = RCall(_IWave, GetUnsafePtr)(This -> ECurve); \
+        Local = EPtr[This -> LastPosition]; \
+    } \
     _T1 New = Local + 20 * log10(This -> Gain * This -> Gain); \
     if(New > This -> Intensity) \
         New = This -> Intensity; \
@@ -120,7 +134,7 @@ RTMethod(void, CDSP2_NormIterfector, PrevTo, int Position)
     _NormInit();
     int OrigPosition = This -> LastPosition;
     This -> LastPosition = This -> InitPosition;
-    while(This -> LastPosition > Position)
+    while(This -> LastPosition > Position + This -> HopSize)
     {
         This -> LastPosition -= This -> HopSize;
         

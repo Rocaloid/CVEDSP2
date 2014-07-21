@@ -13,6 +13,7 @@ RClass(_RTClassName)
     
     //Private
     _Gain* Subsizer;
+    void* ECurve;
     void* Wave;
     int LastPosition;
     int InitPosition;
@@ -20,6 +21,7 @@ RClass(_RTClassName)
 
 RTMethod(void, CDSP2_NormIterfector, SetWave, void* Sorc);
 RTMethod(void, CDSP2_NormIterfector, SetOutWave, void* Sorc);
+RTMethod(void, CDSP2_NormIterfector, SetEnergyWave, void* Sorc);
 RTMethod(void, CDSP2_NormIterfector, SetHopSize, int HopSize);
 RTMethod(void, CDSP2_NormIterfector, SetGain, int Gain);
 RTMethod(void, CDSP2_NormIterfector, SetIntensity, int Intensity);
