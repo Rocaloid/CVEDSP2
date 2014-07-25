@@ -23,8 +23,8 @@ RTMethod(void, CDSP2_NormIterfector, SetWave, void* Sorc);
 RTMethod(void, CDSP2_NormIterfector, SetOutWave, void* Sorc);
 RTMethod(void, CDSP2_NormIterfector, SetEnergyWave, void* Sorc);
 RTMethod(void, CDSP2_NormIterfector, SetHopSize, int HopSize);
-RTMethod(void, CDSP2_NormIterfector, SetGain, int Gain);
-RTMethod(void, CDSP2_NormIterfector, SetIntensity, int Intensity);
+RTMethod(void, CDSP2_NormIterfector, SetGain, _T1 Gain);
+RTMethod(void, CDSP2_NormIterfector, SetIntensity, _T1 Intensity);
 RTMethod(void, CDSP2_NormIterfector, SetPosition, int Position);
 
 RTMethod(void, CDSP2_NormIterfector, IterNextTo, int Position);

@@ -13,6 +13,7 @@ target_link_libraries(CVEDSP2 m)
 file(GLOB Header_Interface_RFNLInterface "Interface/RFNLInterface/*.h")
 file(GLOB Header_Container "Container/*.h")
 file(GLOB Header_List "List/*.h")
+file(GLOB Header_Iterator "Iterator/*.h")
 install(FILES Interface/Setting.h
               DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CVEDSP2/Interface)
 install(FILES ${Header_Interface_RFNLInterface}
@@ -22,6 +23,10 @@ install(FILES ${Header_Container}
 install(FILES ${Header_List}
               List/_SizeNumList.rc
               DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CVEDSP2/List)
+install(FILES ${Header_Iterator}
+              DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CVEDSP2/Iterator)
+install(FILES WaveUtils.h Misc.h Gain.h _Energy.h
+              DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CVEDSP2/)
 install(FILES Include/CVEDSP2.h
               DESTINATION ${CMAKE_INSTALL_PREFIX}/include/)
 

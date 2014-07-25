@@ -36,15 +36,17 @@ RTFunc(_T1, CDSP2_EnergyCurveFromWaveDB, _Wave* Dest, _Wave* Sorc, int Size)
     RCall(_Wave, Resize)(Dest, Sorc -> Size);
     _T1* Ptr = RCall(_Wave, GetUnsafePtr)(Sorc);
     _T1* DPtr = RCall(_Wave, GetUnsafePtr)(Dest);
-    _T1 Sum = RCall(CDSP2_VSum, _T1)(Ptr, 0, Size);
+    _T1 Sum = 0;
     int i;
+    
+    for(i = 0; i < Size; i ++)
+        Sum += Ptr[i] * Ptr[i];
     for(i = 0; i < Sorc -> Size - Size; i ++)
     {
-        _T1 SafeDiv = Sum / Size;
+        _T1 SafeDiv = (_T1)Sum / Size;
         if(SafeDiv < _LLimit) SafeDiv = _LLimit;
         DPtr[i + Size / 2] = 20.0 * log10(SafeDiv);
-        Sum += Ptr[i + Size] * Ptr[i + Size];
-        Sum -= Ptr[i] * Ptr[i];
+        Sum += Ptr[i + Size] * Ptr[i + Size] - Ptr[i] * Ptr[i];
     }
     for(; i < Sorc -> Size; i ++)
         DPtr[i] = DPtr[Sorc -> Size - Size - 1];

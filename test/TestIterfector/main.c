@@ -15,20 +15,20 @@ int main(void)
     RCall(Wave, Ctor)(& InWave);
     RCall(Wave, Ctor)(& OutWave);
     RCall(Wave, Ctor)(& EWave);
-    String_SetChars(& Path, "/tmp/pitch.wav");
+    String_SetChars(& Path, "/tmp/out.wav");
     if(! RCall(Wave, FromFile)(& InWave, & Path))
         fprintf(stderr, "Cannot open wave.\n");
     RCall(Wave, Resize)(& OutWave, InWave.Size);
     
     CDSP2_EnergyCurveFromWaveDB_Float(& EWave, & InWave, 1024);
     int i;
-    /*
+    
     for(i = 0; i < InWave.Size; i += 128)
     {
         printf("%d %f\n", i + 512, EWave.Data[i]);
         //printf("%d %f\n", i, CDSP2_MeanEnergyFromWaveDB_Float
         //    (& InWave, i - 512, 1024));
-    }*/
+    }
     OutWave.SampleRate = InWave.SampleRate;
     
     /*

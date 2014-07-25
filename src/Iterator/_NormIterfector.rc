@@ -60,12 +60,12 @@ RTMethod(void, CDSP2_NormIterfector, SetHopSize, int HopSize)
     This -> HopSize = HopSize;
 }
 
-RTMethod(void, CDSP2_NormIterfector, SetGain, int Gain)
+RTMethod(void, CDSP2_NormIterfector, SetGain, _T1 Gain)
 {
     This -> Gain = Gain;
 }
 
-RTMethod(void, CDSP2_NormIterfector, SetIntensity, int Intensity)
+RTMethod(void, CDSP2_NormIterfector, SetIntensity, _T1 Intensity)
 {
     This -> Intensity = Intensity;
 }
