@@ -40,6 +40,25 @@ void CDSP2_List_Int_Clear(First)
     Array_Resize(int, This -> Frames, 0);
 }
 
+#define _Def_CDSP2_List_Int_ToPMatch(Type) \
+void _C1(CDSP2_List_Int_ToPMatch_, Type)(First, \
+    _C(PMatch_, Type, _, Type)* Dest) \
+{ \
+    int i; \
+    Array_Resize(Type, Dest -> X, This -> Frames_Index + 1); \
+    Array_Resize(Type, Dest -> Y, This -> Frames_Index + 1); \
+    Dest -> X_Index = This -> Frames_Index; \
+    Dest -> Y_Index = This -> Frames_Index; \
+    for(i = 0; i <= This -> Frames_Index; i ++) \
+    { \
+        Dest -> X[i] = This -> Frames[i]; \
+        Dest -> Y[i] = This -> Frames[i]; \
+    } \
+}
+
+_Def_CDSP2_List_Int_ToPMatch(Float);
+_Def_CDSP2_List_Int_ToPMatch(Double);
+
 int  CDSP2_List_Int_Fetch(First, int Index)
 {
     return This -> Frames[Index];
