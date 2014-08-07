@@ -46,11 +46,11 @@ RTMethod(void, MyName, Resize, int FrameNum)
     {
         Array_ObjDtor(_T2, This -> Frames);
         Array_Resize(_T2, This -> Frames, FrameNum);
+        This -> Frames_Index = FrameNum - 1;
         for(i = 0; i < FrameNum; i ++)
             RCall(_T2, CtorSize)(This -> Frames + i, FrameSize);
         This -> FrameSize = FrameSize;
         This -> FrameNum = 0;
-        This -> Frames_Index = - 1;
         return;
     }
     #endif
@@ -65,6 +65,7 @@ RTMethod(void, MyName, Resize, int FrameNum)
             RCall(_T2, Ctor)(This -> Frames + i);
         #endif
         }
+        This -> Frames_Index = FrameNum - 1;
     }else
     {
         for(i = This -> Frames_Index; i >= FrameNum; i --)
@@ -73,7 +74,6 @@ RTMethod(void, MyName, Resize, int FrameNum)
         This -> FrameNum = FrameNum < This -> FrameNum ?
             FrameNum : This -> FrameNum;
     }
-    This -> Frames_Index = FrameNum - 1;
 }
 
 RTMethod(void, MyName, From, MyType* Sorc)
