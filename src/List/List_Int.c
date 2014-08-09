@@ -35,6 +35,11 @@ void CDSP2_List_Int_From(First, CDSP2_List_Int* Sorc)
     RFNL_VCopy_Gnrc_Int(This -> Frames, Sorc -> Frames, Size);
 }
 
+void CDSP2_List_Int_FromArray(First, int* Sorc, int Sorc_Index)
+{
+    Array_From(int, This -> Frames, Sorc);
+}
+
 void CDSP2_List_Int_Clear(First)
 {
     Array_Resize(int, This -> Frames, 0);
