@@ -21,3 +21,6 @@
 *.nd
 *~
 
+#CMake build directory
+build/*
+build

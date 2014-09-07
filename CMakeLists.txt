@@ -19,6 +19,8 @@ elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES i686*
     OR ${CMAKE_SYSTEM_PROCESSOR} MATCHES x86*)
     add_definitions(-march=i686 -mtune=generic -mtune=core2 -mtune=core-avx-i)
 endif()
+message("-- Detected Supported Platform: " ${CMAKE_SYSTEM_PROCESSOR})
+
 
 # Because of inline functions, we cannot use -O0 for debug.
 set(CMAKE_C_FLAGS_DEBUG "-O2 -ffast-math -g")

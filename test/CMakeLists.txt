@@ -23,4 +23,3 @@ add_test(TestIterfector TestIterfector)
 get_filename_component(TestDir "." ABSOLUTE)
 get_filename_component(TopDir ${CMAKE_SOURCE_DIR} ABSOLUTE)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${TestDir}/TestCtrl -I${TopDir}/src")
-

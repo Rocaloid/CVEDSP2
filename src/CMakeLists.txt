@@ -7,6 +7,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${TopDir}/src")
 
 add_library(CVEDSP2 SHARED ${SRC_LIST})
 include_directories(CVEDSP2 PUBLIC "${CMAKE_SOURCE_DIR}/src")
+SET_TARGET_PROPERTIES(CVEDSP2 PROPERTIES VERSION 2.1 SOVERSION 2)
 target_link_libraries(CVEDSP2 RFNL)
 target_link_libraries(CVEDSP2 m)
 
