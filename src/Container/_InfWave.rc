@@ -115,13 +115,14 @@ RTMethod(int, CDSP2_InfWave, Throw)
     return Length;
 }
 
+//TODO: Fix wrapping
 #undef  _IOWrap
 #define _IOWrap \
-    if(! RCall(_RTClassName, VBoundCheck)(This, LVPosition)) \
-        return 0; \
+    /*if(! RCall(_RTClassName, VBoundCheck)(This, LVPosition)) \
+        return 0;*/ \
     int LBound = LVPosition - This -> VPosition; \
     /*Right edge*/ \
-    if(LBound + Size > _Base -> Size) \
+    if(LBound + Size > _Base -> Size || LBound + Size < 0) \
         return 0;
 
 //*** Read ***
