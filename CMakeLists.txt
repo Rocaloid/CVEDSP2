@@ -1,40 +1,45 @@
-cmake_minimum_required(VERSION 2.8.4)
+cmake_minimum_required(VERSION 2.8)
+
 project(CVEDSP2)
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
+if(TARGET CVEDSP2)
+    return()
 endif()
 
-add_definitions(-std=gnu99 -Wall)
-
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    add_definitions(-march=x86-64 -mtune=generic -mtune=core2 -mtune=core-avx-i)
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    add_definitions(-march=i686 -mtune=generic -mtune=core2 -mtune=core-avx-i)
+if(NOT MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 else()
-    message(FATAL_ERROR "Your system is unsupported!")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
 endif()
 
-# Because of inline functions, we cannot use -O0 for debug.
-set(CMAKE_C_FLAGS_DEBUG "-O2 -ffast-math -g")
-set(CMAKE_C_FLAGS_RELEASE "-Ofast -DNDEBUG")
+file(GLOB_RECURSE SRC_SOURCES "src/*.c")
+add_library(CVEDSP2 STATIC ${SRC_SOURCES})
+set_target_properties(CVEDSP2 PROPERTIES
+    C_STANDARD 99
+    POSITION_INDEPENDENT_CODE ON
+)
+target_include_directories(CVEDSP2 PRIVATE "src")
 
-set(CMAKE_LD_FLAGS_DEBUG "-Wl,-O0")
-set(CMAKE_LD_FLAGS_RELEASE "-Wl,-O1,--as-needed,--sort-common")
+add_subdirectory(external/RUtil2)
+add_subdirectory(external/RFNL)
+target_link_libraries(CVEDSP2 RUtil2 RFNL)
 
-enable_testing()
+# Arrange header files for external use
+add_custom_command(TARGET CVEDSP2 POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory "include/CVEDSP2")
+add_custom_command(TARGET CVEDSP2 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/src/Include/CVEDSP2.h" "include/CVEDSP2.h")
+add_custom_command(TARGET CVEDSP2 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/src/List/_SizeNumList.rc" "include/CVEDSP2/List/_SizeNumList.rc")
+file(GLOB_RECURSE SRC_HEADERS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/src" "src/*.h")
+foreach(SRC_HEADER ${SRC_HEADERS})
+    add_custom_command(TARGET CVEDSP2 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/src/${SRC_HEADER}" "include/CVEDSP2/${SRC_HEADER}")
+endforeach()
+target_include_directories(CVEDSP2 INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/include")
 
-include(GNUInstallDirs)
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")  # Test subproject
+    include(CTest)
+    #add_subdirectory(test)
+endif()
 
-# uninstall target
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    IMMEDIATE @ONLY)
-
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-
-add_subdirectory(src)
-add_subdirectory(doc)
-add_subdirectory(test)
+# Workaround for CMake version older than 3.1
+# Remove this and set the minimum required version to 3.1
+# when we make sure everyone is having CMake 3.1
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
